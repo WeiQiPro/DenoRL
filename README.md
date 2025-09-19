@@ -14,6 +14,7 @@ I wanted to remove the higher-level, idiomatic class wrappers and expose a near 
 - Stick close to raylib's function names, constants, and structs.
 - Favor simple FFI bindings over abstractions.
 - Keep examples runnable with Deno permissions and idioms.
+- Provide an easy way to build a project and ship it!
 
 ## Caveats
 - File I/O (loading files from disk, etc.) should be done via Deno APIs when possible. Avoid calling into raylib for generic file operations; feed raylib buffers instead.
