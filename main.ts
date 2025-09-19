@@ -91,7 +91,7 @@ function drawPlexus(points: Point[], frame: number): void {
 
     // Node (round coordinates to int for FFI safety)
     const nodeRadius = 2 + (Math.sin((frame + i * 7) * 0.05) + 1) * 1.2;
-    RL.DrawCircle(Math.round(a.x), Math.round(a.y), nodeRadius, RL.GRAY);
+    RL.DrawCircle(Math.floor(a.x), Math.floor(a.y), nodeRadius, RL.GRAY);
 
     // Links
     for (let j = i + 1; j < points.length; j++) {
