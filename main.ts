@@ -1,48 +1,79 @@
 import * as RL from "raylib";
 
+// Screen configuration
 const Screen = {
   width: 1280,
   height: 720,
 };
 
-RL.InitWindow(Screen.width, Screen.height, "Raylib Deno - Demo");
-RL.HideCursor();
-RL.SetTargetFPS(60);
-
-// Plexus animation setup
+// Plexus configuration
 const NUM_POINTS = 120;
 const MAX_LINK_DIST = 130; // pixels
-const points: { pos: RL.Vector2; vel: RL.Vector2 }[] = [];
-for (let i = 0; i < NUM_POINTS; i++) {
-  const x = Math.random() * Screen.width;
-  const y = Math.random() * Screen.height;
-  const speed = 0.6 + Math.random() * 0.8;
-  const angle = Math.random() * Math.PI * 2;
-  points.push({
-    pos: new RL.Vector2(x, y),
-    vel: new RL.Vector2(Math.cos(angle) * speed, Math.sin(angle) * speed),
-  });
-}
 
+// Types
+type Point = { pos: RL.Vector2; vel: RL.Vector2 };
+
+// Entry
+setupWindow();
+const points = createPlexusPoints(NUM_POINTS, Screen.width, Screen.height);
 let frame = 0;
-let MousePosition: RL.Vector2;
 
 while (!RL.WindowShouldClose()) {
-  MousePosition = RL.GetMousePosition();
+  const mouse = RL.GetMousePosition();
   frame++;
 
-  // Update plexus points
-  for (const p of points) {
-    p.pos.x += p.vel.x;
-    p.pos.y += p.vel.y;
-    if (p.pos.x < 0 || p.pos.x > Screen.width) p.vel.x *= -1;
-    if (p.pos.y < 0 || p.pos.y > Screen.height) p.vel.y *= -1;
-  }
+  updatePlexus(points, Screen.width, Screen.height);
 
   RL.BeginDrawing();
   RL.ClearBackground(RL.BLACK);
 
-  // Title & HUD
+  drawHUD(frame);
+  drawPlexus(points, frame);
+  drawMouseIndicator(mouse);
+  drawShapesAndText(frame);
+
+  RL.EndDrawing();
+}
+
+RL.CloseWindow();
+
+// ---------- Helpers ----------
+
+function setupWindow(): void {
+  RL.InitWindow(Screen.width, Screen.height, "Raylib Deno - Demo");
+  RL.HideCursor();
+  RL.SetTargetFPS(60);
+}
+
+function createPlexusPoints(
+  count: number,
+  width: number,
+  height: number
+): Point[] {
+  const out: Point[] = [];
+  for (let i = 0; i < count; i++) {
+    const x = Math.random() * width;
+    const y = Math.random() * height;
+    const speed = 0.6 + Math.random() * 0.8;
+    const angle = Math.random() * Math.PI * 2;
+    out.push({
+      pos: new RL.Vector2(x, y),
+      vel: new RL.Vector2(Math.cos(angle) * speed, Math.sin(angle) * speed),
+    });
+  }
+  return out;
+}
+
+function updatePlexus(points: Point[], width: number, height: number): void {
+  for (const p of points) {
+    p.pos.x += p.vel.x;
+    p.pos.y += p.vel.y;
+    if (p.pos.x < 0 || p.pos.x > width) p.vel.x *= -1;
+    if (p.pos.y < 0 || p.pos.y > height) p.vel.y *= -1;
+  }
+}
+
+function drawHUD(frame: number): void {
   RL.DrawFPS(10, 10);
   RL.DrawText("Raylib Deno - 2D Demo + Plexus", 10, 36, 22, RL.RAYWHITE);
   RL.DrawText(
@@ -52,13 +83,17 @@ while (!RL.WindowShouldClose()) {
     16,
     RL.LIGHTGRAY
   );
+}
 
-  // Plexus draw (lines between nearby points)
+function drawPlexus(points: Point[], frame: number): void {
   for (let i = 0; i < points.length; i++) {
     const a = points[i].pos;
-    // subtle parallax wobble for nodes
+
+    // Node (round coordinates to int for FFI safety)
     const nodeRadius = 2 + (Math.sin((frame + i * 7) * 0.05) + 1) * 1.2;
-    RL.DrawCircle(Math.floor(a.x), Math.floor(a.y), nodeRadius, RL.GRAY);
+    RL.DrawCircle(Math.round(a.x), Math.round(a.y), nodeRadius, RL.GRAY);
+
+    // Links
     for (let j = i + 1; j < points.length; j++) {
       const b = points[j].pos;
       const dx = a.x - b.x;
@@ -68,47 +103,50 @@ while (!RL.WindowShouldClose()) {
         const t = 1 - dist / MAX_LINK_DIST; // 0..1
         const alpha = Math.min(255, Math.max(0, Math.floor(200 * t)));
         RL.DrawLine(
-          Math.floor(a.x),
-          Math.floor(a.y),
-          Math.floor(b.x),
-          Math.floor(b.y),
+          Math.round(a.x),
+          Math.round(a.y),
+          Math.round(b.x),
+          Math.round(b.y),
           new RL.Color(200, 200, 200, alpha)
         );
       }
     }
   }
+}
 
-  // Mouse influence circle
-  RL.DrawCircle(
-    Math.floor(MousePosition.x),
-    Math.floor(MousePosition.y),
-    8,
-    RL.YELLOW
-  );
+function drawMouseIndicator(mouse: RL.Vector2): void {
+  RL.DrawCircle(Math.round(mouse.x), Math.round(mouse.y), 8, RL.YELLOW);
+}
 
-  // Demonstrate shapes (animated)
+function drawShapesAndText(frame: number): void {
   const baseY = 420;
-  // Rectangles
+
+  // Rectangles (ints expected)
   RL.DrawRectangle(40, baseY - 40, 120, 80, RL.DARKBLUE);
   RL.DrawRectangleLines(40, baseY - 40, 120, 80, RL.SKYBLUE);
-  // Circles
+
+  // Circles (center ints, radius float)
   const rPulse = 28 + Math.sin(frame * 0.07) * 6;
   RL.DrawCircle(220, baseY, rPulse, RL.DARKGREEN);
   RL.DrawCircleLines(220, baseY, 36, RL.LIME);
-  // Lines
+
+  // Lines (ints expected)
   RL.DrawLine(280, baseY - 40, 360, baseY + 40, RL.RED);
   RL.DrawLine(360, baseY - 40, 280, baseY + 40, RL.ORANGE);
-  // Triangle
+
+  // Triangle (Vector2-based)
   RL.DrawTriangle(
     new RL.Vector2(420, baseY - 48),
     new RL.Vector2(380, baseY + 44),
     new RL.Vector2(460, baseY + 44),
     RL.MAGENTA
   );
-  // Polygon (hex) rotating
+
+  // Polygon (Vector2 center, sides int, radius/rotation float)
   const rotation = (frame * 0.9) % 360;
   RL.DrawPoly(new RL.Vector2(540, baseY + 4), 6, 36, rotation, RL.GOLD);
-  // Rounded rectangle
+
+  // Rounded rectangle (Rectangle + floats)
   RL.DrawRectangleRounded(
     new RL.Rectangle(600, baseY - 36, 120, 72),
     0.3,
@@ -123,13 +161,9 @@ while (!RL.WindowShouldClose()) {
     RL.BROWN
   );
 
-  // Text samples
+  // Text
   RL.DrawText("Shapes:", 40, baseY - 80, 20, RL.WHITE);
   RL.DrawText("Text sizes: 12, 20, 28", 40, baseY + 80, 12, RL.LIGHTGRAY);
   RL.DrawText("Sample Text 20", 240, baseY + 70, 20, RL.RAYWHITE);
   RL.DrawText("Sample Text 28", 420, baseY + 60, 28, RL.YELLOW);
-
-  RL.EndDrawing();
 }
-
-RL.CloseWindow();
