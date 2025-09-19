@@ -1,0 +1,19 @@
+{
+  "tasks": {
+    "run": "./build/windows-x86_64/proto.exe",
+    "dev": "deno run -A --unstable-ffi main.ts",
+    "build": "deno run --allow-read --allow-write --allow-run --allow-net --allow-sys ./metadata/build.ts",
+    "build_run": "deno run --allow-read --allow-write --allow-run --allow-net --allow-sys ./metadata/build.ts && ./build/windows-x86_64/proto.exe",
+    "test": "deno run --allow-ffi --allow-read --allow-write --allow-run --allow-net --allow-sys tests/run_all_tests.ts",
+    "test:core": "deno run --allow-ffi --allow-read --allow-write --allow-run --allow-net --allow-sys tests/raylib_test.ts",
+    "test:audio": "deno run --allow-ffi --allow-read --allow-write --allow-run --allow-net --allow-sys tests/audio_test.ts",
+    "test:drawing": "deno run --allow-ffi --allow-read --allow-write --allow-run --allow-net --allow-sys tests/drawing_test.ts"
+  },
+  "imports": {
+    "@std/fs": "jsr:@std/fs@^1.0.19",
+    "@std/path": "jsr:@std/path@^1.1.2",
+    "@std/assert": "jsr:@std/assert@^0.208.0",
+    "@std/cli": "jsr:@std/cli@^0.208.0",
+    "raylib": "./raylib/raylib.ts"
+  }
+}

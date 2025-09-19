@@ -1,0 +1,52 @@
+{
+  "project": {
+    "name": "proto",
+    "displayName": "Raylib Deno Game",
+    "description": "A Raylib game built with Deno",
+    "version": "1.0.0",
+    "author": "Developer",
+    "license": "MIT",
+    "repository": "https://github.com/username/raylib_deno",
+    "homepage": "https://github.com/username/raylib_deno"
+  },
+  "build": {
+    "executableName": "proto",
+    "buildDir": "build",
+    "sourceFiles": {
+      "main": "main.ts",
+      "assets": "assets",
+      "blobs": "raylib/blobs"
+    },
+    "targetFiles": {
+      "blobs": "blobs",
+      "assets": "assets"
+    },
+    "createRunScript": true,
+    "createReadme": true,
+    "cleanBeforeBuild": true
+  },
+  "distribution": {
+    "portable": true,
+    "standalone": true,
+    "requiresDeno": false,
+    "requiresNode": false,
+    "minimumRequirements": {
+      "memory": "64MB",
+      "diskSpace": "100MB"
+    }
+  },
+  "dependencies": {
+    "raylib": {
+      "version": "5.0",
+      "nativeLibs": {
+        "windows": "raylib.dll",
+        "darwin": "libraylib.dylib",
+        "linux": "libraylib.so"
+      }
+    },
+    "denoStd": {
+      "version": "0.203.0",
+      "modules": ["fs", "path"]
+    }
+  }
+}
