@@ -13,7 +13,6 @@
     "raylib": "./raylib/raylib.ts"
   },
   "compilerOptions": {
-    "types": ["./raylib/types.d.ts"],
-    "global": ["./raylib/raylib.ts"]
+    "types": ["./raylib/types.d.ts"]
   }
 }
