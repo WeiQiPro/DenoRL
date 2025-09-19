@@ -10,6 +10,9 @@ import { lib } from "./bindings/bindings.ts";
 // TYPES
 // ============================================================================
 
+// Note: Core numeric types (i8, i32, i64, u8, u32, u64, f32, f64, pointer, buffer)
+// are now globally available via types.d.ts
+
 /**
  * Core types and utilities for raylib bindings
  * @module
@@ -19,7 +22,7 @@ import { lib } from "./bindings/bindings.ts";
  * 2D Vector with x, y coordinates
  */
 export class Vector2 {
-  constructor(public x: number, public y: number) {}
+  constructor(public x: f32, public y: f32) {}
 
   static fromBuffer(buffer: ArrayBuffer): Vector2 {
     const view = new DataView(buffer);
@@ -42,7 +45,7 @@ export class Vector2 {
  * 3D Vector with x, y, z coordinates
  */
 export class Vector3 {
-  constructor(public x: number, public y: number, public z: number) {}
+  constructor(public x: f32, public y: f32, public z: f32) {}
 
   static fromBuffer(buffer: ArrayBuffer): Vector3 {
     const view = new DataView(buffer);
@@ -66,12 +69,7 @@ export class Vector3 {
  * 4D Vector with x, y, z, w coordinates
  */
 export class Vector4 {
-  constructor(
-    public x: number,
-    public y: number,
-    public z: number,
-    public w: number
-  ) {}
+  constructor(public x: f32, public y: f32, public z: f32, public w: f32) {}
 
   static fromBuffer(buffer: ArrayBuffer): Vector4 {
     const view = new DataView(buffer);
@@ -97,10 +95,10 @@ export class Vector4 {
  */
 export class Rectangle {
   constructor(
-    public x: number,
-    public y: number,
-    public width: number,
-    public height: number
+    public x: f32,
+    public y: f32,
+    public width: f32,
+    public height: f32
   ) {}
 
   static fromBuffer(buffer: ArrayBuffer): Rectangle {
@@ -127,10 +125,10 @@ export class Rectangle {
  */
 export class Color {
   constructor(
-    public r: number,
-    public g: number,
-    public b: number,
-    public a: number = 255
+    public r: i32,
+    public g: i32,
+    public b: i32,
+    public a: i32 = 255
   ) {}
 
   static fromBuffer(buffer: ArrayBuffer): Color {
@@ -264,9 +262,9 @@ export class Camera2D {
   /** Camera target (rotation and zoom origin) */
   target: Vector2;
   /** Camera rotation in degrees */
-  rotation: number;
+  rotation: f32;
   /** Camera zoom (scaling), 1.0f by default */
-  zoom: number;
+  zoom: f32;
 
   constructor(options?: {
     /** Camera offset (displacement from target) */
@@ -274,9 +272,9 @@ export class Camera2D {
     /** Camera target (rotation and zoom origin) */
     target?: Vector2;
     /** Camera rotation in degrees */
-    rotation?: number;
+    rotation?: f32;
     /** Camera zoom (scaling), 1.0f by default */
-    zoom?: number;
+    zoom?: f32;
   }) {
     this.offset = options?.offset ?? new Vector2(0, 0);
     this.target = options?.target ?? new Vector2(0, 0);
@@ -305,22 +303,22 @@ export class Camera2D {
  */
 export class Matrix {
   constructor(
-    public m0: number,
-    public m1: number,
-    public m2: number,
-    public m3: number,
-    public m4: number,
-    public m5: number,
-    public m6: number,
-    public m7: number,
-    public m8: number,
-    public m9: number,
-    public m10: number,
-    public m11: number,
-    public m12: number,
-    public m13: number,
-    public m14: number,
-    public m15: number
+    public m0: f32,
+    public m1: f32,
+    public m2: f32,
+    public m3: f32,
+    public m4: f32,
+    public m5: f32,
+    public m6: f32,
+    public m7: f32,
+    public m8: f32,
+    public m9: f32,
+    public m10: f32,
+    public m11: f32,
+    public m12: f32,
+    public m13: f32,
+    public m14: f32,
+    public m15: f32
   ) {}
 
   static fromBuffer(buffer: ArrayBuffer): Matrix {
@@ -463,7 +461,7 @@ export const FLAG_INTERLACED_HINT = 0x00010000;
 /**
  * Initialize window and OpenGL context
  */
-export function InitWindow(width: number, height: number, title: string): void {
+export function InitWindow(width: i32, height: i32, title: string): void {
   lib.symbols.InitWindow(width, height, createStringBuffer(title));
 }
 
@@ -533,21 +531,21 @@ export function IsWindowResized(): boolean {
 /**
  * Check if one specific window flag is enabled
  */
-export function IsWindowState(flag: number): boolean {
+export function IsWindowState(flag: u32): boolean {
   return !!lib.symbols.IsWindowState(flag);
 }
 
 /**
  * Set window configuration state using flags (only PLATFORM_DESKTOP)
  */
-export function SetWindowState(flags: number): void {
+export function SetWindowState(flags: u32): void {
   lib.symbols.SetWindowState(flags);
 }
 
 /**
  * Clear window configuration state flags
  */
-export function ClearWindowState(flags: number): void {
+export function ClearWindowState(flags: u32): void {
   lib.symbols.ClearWindowState(flags);
 }
 
@@ -598,7 +596,7 @@ export function SetWindowIcon(image: { buffer: ArrayBuffer }): void {
  */
 export function SetWindowIcons(
   images: { buffer: ArrayBuffer }[],
-  count: number
+  count: i32
 ): void {
   const buffer = new Uint8Array(24 * count);
   for (let i = 0; i < count; i++) {
@@ -617,42 +615,42 @@ export function SetWindowTitle(title: string): void {
 /**
  * Set window position on screen (only PLATFORM_DESKTOP)
  */
-export function SetWindowPosition(x: number, y: number): void {
+export function SetWindowPosition(x: i32, y: i32): void {
   lib.symbols.SetWindowPosition(x, y);
 }
 
 /**
  * Set monitor for the current window
  */
-export function SetWindowMonitor(monitor: number): void {
+export function SetWindowMonitor(monitor: i32): void {
   lib.symbols.SetWindowMonitor(monitor);
 }
 
 /**
  * Set window minimum dimensions (for FLAG_WINDOW_RESIZABLE)
  */
-export function SetWindowMinSize(width: number, height: number): void {
+export function SetWindowMinSize(width: i32, height: i32): void {
   lib.symbols.SetWindowMinSize(width, height);
 }
 
 /**
  * Set window maximum dimensions (for FLAG_WINDOW_RESIZABLE)
  */
-export function SetWindowMaxSize(width: number, height: number): void {
+export function SetWindowMaxSize(width: i32, height: i32): void {
   lib.symbols.SetWindowMaxSize(width, height);
 }
 
 /**
  * Set window dimensions
  */
-export function SetWindowSize(width: number, height: number): void {
+export function SetWindowSize(width: i32, height: i32): void {
   lib.symbols.SetWindowSize(width, height);
 }
 
 /**
  * Set window opacity [0.0f..1.0f] (only PLATFORM_DESKTOP)
  */
-export function SetWindowOpacity(opacity: number): void {
+export function SetWindowOpacity(opacity: f32): void {
   lib.symbols.SetWindowOpacity(opacity);
 }
 
@@ -673,49 +671,49 @@ export function GetWindowHandle(): Deno.PointerValue {
 /**
  * Get current screen width
  */
-export function GetScreenWidth(): number {
+export function GetScreenWidth(): i32 {
   return lib.symbols.GetScreenWidth();
 }
 
 /**
  * Get current screen height
  */
-export function GetScreenHeight(): number {
+export function GetScreenHeight(): i32 {
   return lib.symbols.GetScreenHeight();
 }
 
 /**
  * Get current render width (it considers HiDPI)
  */
-export function GetRenderWidth(): number {
+export function GetRenderWidth(): i32 {
   return lib.symbols.GetRenderWidth();
 }
 
 /**
  * Get current render height (it considers HiDPI)
  */
-export function GetRenderHeight(): number {
+export function GetRenderHeight(): i32 {
   return lib.symbols.GetRenderHeight();
 }
 
 /**
  * Get number of connected monitors
  */
-export function GetMonitorCount(): number {
+export function GetMonitorCount(): i32 {
   return lib.symbols.GetMonitorCount();
 }
 
 /**
  * Get current connected monitor
  */
-export function GetCurrentMonitor(): number {
+export function GetCurrentMonitor(): i32 {
   return lib.symbols.GetCurrentMonitor();
 }
 
 /**
  * Get specified monitor position
  */
-export function GetMonitorPosition(monitor: number): Vector2 {
+export function GetMonitorPosition(monitor: i32): Vector2 {
   return Vector2.fromBuffer(
     lib.symbols.GetMonitorPosition(monitor).buffer as ArrayBuffer
   );
@@ -724,35 +722,35 @@ export function GetMonitorPosition(monitor: number): Vector2 {
 /**
  * Get specified monitor width (current video mode used by monitor)
  */
-export function GetMonitorWidth(monitor: number): number {
+export function GetMonitorWidth(monitor: i32): i32 {
   return lib.symbols.GetMonitorWidth(monitor);
 }
 
 /**
  * Get specified monitor height (current video mode used by monitor)
  */
-export function GetMonitorHeight(monitor: number): number {
+export function GetMonitorHeight(monitor: i32): i32 {
   return lib.symbols.GetMonitorHeight(monitor);
 }
 
 /**
  * Get specified monitor physical width in millimetres
  */
-export function GetMonitorPhysicalWidth(monitor: number): number {
+export function GetMonitorPhysicalWidth(monitor: i32): i32 {
   return lib.symbols.GetMonitorPhysicalWidth(monitor);
 }
 
 /**
  * Get specified monitor physical height in millimetres
  */
-export function GetMonitorPhysicalHeight(monitor: number): number {
+export function GetMonitorPhysicalHeight(monitor: i32): i32 {
   return lib.symbols.GetMonitorPhysicalHeight(monitor);
 }
 
 /**
  * Get specified monitor refresh rate
  */
-export function GetMonitorRefreshRate(monitor: number): number {
+export function GetMonitorRefreshRate(monitor: i32): i32 {
   return lib.symbols.GetMonitorRefreshRate(monitor);
 }
 
@@ -777,7 +775,7 @@ export function GetWindowScaleDPI(): Vector2 {
 /**
  * Get the human-readable, UTF-8 encoded name of the primary monitor
  */
-export function GetMonitorName(monitor: number): string {
+export function GetMonitorName(monitor: i32): string {
   const ptr = lib.symbols.GetMonitorName(monitor);
   if (ptr) {
     return new Deno.UnsafePointerView(ptr).getCString();
@@ -957,7 +955,7 @@ export function EndShaderMode(): void {
 /**
  * Begin blending mode (alpha, additive, multiplied, subtract, custom)
  */
-export function BeginBlendMode(mode: number): void {
+export function BeginBlendMode(mode: i32): void {
   lib.symbols.BeginBlendMode(mode);
 }
 
@@ -972,10 +970,10 @@ export function EndBlendMode(): void {
  * Begin scissor mode (define screen area for following drawing)
  */
 export function BeginScissorMode(
-  x: number,
-  y: number,
-  width: number,
-  height: number
+  x: i32,
+  y: i32,
+  width: i32,
+  height: i32
 ): void {
   lib.symbols.BeginScissorMode(x, y, width, height);
 }
@@ -1013,28 +1011,28 @@ export function EndVrStereoMode(): void {
 /**
  * Set target FPS (maximum)
  */
-export function SetTargetFPS(fps: number): void {
+export function SetTargetFPS(fps: i32): void {
   lib.symbols.SetTargetFPS(fps);
 }
 
 /**
  * Get time in seconds for last frame drawn (delta time)
  */
-export function GetFrameTime(): number {
+export function GetFrameTime(): f32 {
   return lib.symbols.GetFrameTime();
 }
 
 /**
  * Get elapsed time in seconds since InitWindow()
  */
-export function GetTime(): number {
+export function GetTime(): f64 {
   return lib.symbols.GetTime();
 }
 
 /**
  * Returns current FPS
  */
-export function GetFPS(): number {
+export function GetFPS(): i32 {
   return lib.symbols.GetFPS();
 }
 
@@ -1055,21 +1053,21 @@ export function PollInputEvents(): void {
 /**
  * Wait for some time (halt program execution)
  */
-export function WaitTime(seconds: number): void {
+export function WaitTime(seconds: f32): void {
   lib.symbols.WaitTime(seconds);
 }
 
 /**
  * Set the seed for the random number generator
  */
-export function SetRandomSeed(seed: number): void {
+export function SetRandomSeed(seed: u32): void {
   lib.symbols.SetRandomSeed(seed);
 }
 
 /**
  * Get a random value between min and max (both included)
  */
-export function GetRandomValue(min: number, max: number): number {
+export function GetRandomValue(min: i32, max: i32): i32 {
   return lib.symbols.GetRandomValue(min, max);
 }
 
@@ -1106,14 +1104,14 @@ export function IsAudioDeviceReady(): boolean {
 /**
  * Set master volume (listener)
  */
-export function SetMasterVolume(volume: number): void {
+export function SetMasterVolume(volume: f32): void {
   lib.symbols.SetMasterVolume(volume);
 }
 
 /**
  * Get master volume (listener)
  */
-export function GetMasterVolume(): number {
+export function GetMasterVolume(): f32 {
   return lib.symbols.GetMasterVolume();
 }
 
@@ -1133,9 +1131,9 @@ export class AudioStream {
   constructor(
     public audioBuffer: { buffer: ArrayBuffer },
     public processor: { buffer: ArrayBuffer },
-    public sampleRate: number,
-    public sampleSize: number,
-    public channels: number
+    public sampleRate: u32,
+    public sampleSize: u32,
+    public channels: u32
   ) {}
 
   static fromBuffer(buffer: ArrayBuffer): AudioStream {
@@ -1170,9 +1168,9 @@ export class AudioStream {
  * Load audio stream (to stream raw audio pcm data)
  */
 export function LoadAudioStream(
-  sampleRate: number,
-  sampleSize: number,
-  channels: number
+  sampleRate: u32,
+  sampleSize: u32,
+  channels: u32
 ): AudioStream {
   return AudioStream.fromBuffer(
     lib.symbols.LoadAudioStream(sampleRate, sampleSize, channels).buffer
@@ -1198,8 +1196,8 @@ export function UnloadAudioStream(stream: AudioStream): void {
  */
 export function UpdateAudioStream(
   stream: AudioStream,
-  data: number[],
-  frameCount: number
+  data: f32[],
+  frameCount: i32
 ): void {
   const buffer = new Float32Array(data);
   lib.symbols.UpdateAudioStream(
@@ -1254,24 +1252,21 @@ export function StopAudioStream(stream: AudioStream): void {
 /**
  * Set volume for audio stream (1.0 is max level)
  */
-export function SetAudioStreamVolume(
-  stream: AudioStream,
-  volume: number
-): void {
+export function SetAudioStreamVolume(stream: AudioStream, volume: f32): void {
   lib.symbols.SetAudioStreamVolume(stream.buffer as ArrayBuffer, volume);
 }
 
 /**
  * Set pitch for audio stream (1.0 is base level)
  */
-export function SetAudioStreamPitch(stream: AudioStream, pitch: number): void {
+export function SetAudioStreamPitch(stream: AudioStream, pitch: f32): void {
   lib.symbols.SetAudioStreamPitch(stream.buffer, pitch);
 }
 
 /**
  * Set pan for audio stream (0.5 is center)
  */
-export function SetAudioStreamPan(stream: AudioStream, pan: number): void {
+export function SetAudioStreamPan(stream: AudioStream, pan: f32): void {
   lib.symbols.SetAudioStreamPan(stream.buffer, pan);
 }
 
@@ -1288,10 +1283,7 @@ export function SetAudioStreamPan(stream: AudioStream, pan: number): void {
  * Sound type
  */
 export class Sound {
-  constructor(
-    public stream: { buffer: ArrayBuffer },
-    public frameCount: number
-  ) {}
+  constructor(public stream: { buffer: ArrayBuffer }, public frameCount: i32) {}
 
   static fromBuffer(buffer: ArrayBuffer): Sound {
     const view = new DataView(buffer);
@@ -1383,21 +1375,21 @@ export function IsSoundPlaying(sound: Sound): boolean {
 /**
  * Set volume for a sound (1.0 is max level)
  */
-export function SetSoundVolume(sound: Sound, volume: number): void {
+export function SetSoundVolume(sound: Sound, volume: f32): void {
   lib.symbols.SetSoundVolume(sound.buffer, volume);
 }
 
 /**
  * Set pitch for a sound (1.0 is base level)
  */
-export function SetSoundPitch(sound: Sound, pitch: number): void {
+export function SetSoundPitch(sound: Sound, pitch: f32): void {
   lib.symbols.SetSoundPitch(sound.buffer, pitch);
 }
 
 /**
  * Set pan for a sound (0.5 is center)
  */
-export function SetSoundPan(sound: Sound, pan: number): void {
+export function SetSoundPan(sound: Sound, pan: f32): void {
   lib.symbols.SetSoundPan(sound.buffer, pan);
 }
 
@@ -1416,9 +1408,9 @@ export function SetSoundPan(sound: Sound, pan: number): void {
 export class Music {
   constructor(
     public stream: { buffer: ArrayBuffer },
-    public frameCount: number,
+    public frameCount: i32,
     public looping: boolean,
-    public ctxType: number,
+    public ctxType: i32,
     public ctxData: { buffer: ArrayBuffer }
   ) {}
 
@@ -1464,7 +1456,7 @@ export function LoadMusicStream(fileName: string): Music {
 export function LoadMusicStreamFromMemory(
   fileType: string,
   data: Uint8Array,
-  dataSize: number
+  dataSize: i32
 ): Music {
   return Music.fromBuffer(
     lib.symbols.LoadMusicStreamFromMemory(
@@ -1531,42 +1523,42 @@ export function ResumeMusicStream(music: Music): void {
 /**
  * Seek music to a position (in seconds)
  */
-export function SeekMusicStream(music: Music, position: number): void {
+export function SeekMusicStream(music: Music, position: f32): void {
   lib.symbols.SeekMusicStream(music.buffer, position);
 }
 
 /**
  * Set volume for music (1.0 is max level)
  */
-export function SetMusicVolume(music: Music, volume: number): void {
+export function SetMusicVolume(music: Music, volume: f32): void {
   lib.symbols.SetMusicVolume(music.buffer, volume);
 }
 
 /**
  * Set pitch for a music (1.0 is base level)
  */
-export function SetMusicPitch(music: Music, pitch: number): void {
+export function SetMusicPitch(music: Music, pitch: f32): void {
   lib.symbols.SetMusicPitch(music.buffer, pitch);
 }
 
 /**
  * Set pan for a music (0.5 is center)
  */
-export function SetMusicPan(music: Music, pan: number): void {
+export function SetMusicPan(music: Music, pan: f32): void {
   lib.symbols.SetMusicPan(music.buffer, pan);
 }
 
 /**
  * Get music time length (in seconds)
  */
-export function GetMusicTimeLength(music: Music): number {
+export function GetMusicTimeLength(music: Music): f32 {
   return lib.symbols.GetMusicTimeLength(music.buffer as BufferSource);
 }
 
 /**
  * Get current music time played (in seconds)
  */
-export function GetMusicTimePlayed(music: Music): number {
+export function GetMusicTimePlayed(music: Music): f32 {
   return lib.symbols.GetMusicTimePlayed(music.buffer as BufferSource);
 }
 
@@ -1690,56 +1682,56 @@ export const KEY_KP_EQUAL = 336;
 /**
  * Check if a key has been pressed once
  */
-export function IsKeyPressed(key: number): boolean {
+export function IsKeyPressed(key: i32): boolean {
   return !!lib.symbols.IsKeyPressed(key);
 }
 
 /**
  * Check if a key has been pressed again (Only PLATFORM_DESKTOP)
  */
-export function IsKeyPressedRepeat(key: number): boolean {
+export function IsKeyPressedRepeat(key: i32): boolean {
   return !!lib.symbols.IsKeyPressedRepeat(key);
 }
 
 /**
  * Check if a key is being pressed
  */
-export function IsKeyDown(key: number): boolean {
+export function IsKeyDown(key: i32): boolean {
   return !!lib.symbols.IsKeyDown(key);
 }
 
 /**
  * Check if a key has been released once
  */
-export function IsKeyReleased(key: number): boolean {
+export function IsKeyReleased(key: i32): boolean {
   return !!lib.symbols.IsKeyReleased(key);
 }
 
 /**
  * Check if a key is NOT being pressed
  */
-export function IsKeyUp(key: number): boolean {
+export function IsKeyUp(key: i32): boolean {
   return !!lib.symbols.IsKeyUp(key);
 }
 
 /**
  * Get key pressed (keycode), call it multiple times for keys queued, returns 0 when the queue is empty
  */
-export function GetKeyPressed(): number {
+export function GetKeyPressed(): i32 {
   return lib.symbols.GetKeyPressed();
 }
 
 /**
  * Get char pressed (unicode), call it multiple times for chars queued, returns 0 when the queue is empty
  */
-export function GetCharPressed(): number {
+export function GetCharPressed(): i32 {
   return lib.symbols.GetCharPressed();
 }
 
 /**
  * Set a custom key to exit program (default is ESC)
  */
-export function SetExitKey(key: number): void {
+export function SetExitKey(key: i32): void {
   lib.symbols.SetExitKey(key);
 }
 
@@ -1777,42 +1769,42 @@ export const MOUSE_CURSOR_NOT_ALLOWED = 10;
 /**
  * Check if a mouse button has been pressed once
  */
-export function IsMouseButtonPressed(button: number): boolean {
+export function IsMouseButtonPressed(button: i32): boolean {
   return !!lib.symbols.IsMouseButtonPressed(button);
 }
 
 /**
  * Check if a mouse button is being pressed
  */
-export function IsMouseButtonDown(button: number): boolean {
+export function IsMouseButtonDown(button: i32): boolean {
   return !!lib.symbols.IsMouseButtonDown(button);
 }
 
 /**
  * Check if a mouse button has been released once
  */
-export function IsMouseButtonReleased(button: number): boolean {
+export function IsMouseButtonReleased(button: i32): boolean {
   return !!lib.symbols.IsMouseButtonReleased(button);
 }
 
 /**
  * Check if a mouse button is NOT being pressed
  */
-export function IsMouseButtonUp(button: number): boolean {
+export function IsMouseButtonUp(button: i32): boolean {
   return !!lib.symbols.IsMouseButtonUp(button);
 }
 
 /**
  * Get mouse position X
  */
-export function GetMouseX(): number {
+export function GetMouseX(): i32 {
   return lib.symbols.GetMouseX();
 }
 
 /**
  * Get mouse position Y
  */
-export function GetMouseY(): number {
+export function GetMouseY(): i32 {
   return lib.symbols.GetMouseY();
 }
 
@@ -1835,28 +1827,28 @@ export function GetMouseDelta(): Vector2 {
 /**
  * Set mouse position XY
  */
-export function SetMousePosition(x: number, y: number): void {
+export function SetMousePosition(x: i32, y: i32): void {
   lib.symbols.SetMousePosition(x, y);
 }
 
 /**
  * Set mouse offset
  */
-export function SetMouseOffset(offsetX: number, offsetY: number): void {
+export function SetMouseOffset(offsetX: i32, offsetY: i32): void {
   lib.symbols.SetMouseOffset(offsetX, offsetY);
 }
 
 /**
  * Set mouse scaling
  */
-export function SetMouseScale(scaleX: number, scaleY: number): void {
+export function SetMouseScale(scaleX: f32, scaleY: f32): void {
   lib.symbols.SetMouseScale(scaleX, scaleY);
 }
 
 /**
  * Get mouse wheel movement Y
  */
-export function GetMouseWheelMove(): number {
+export function GetMouseWheelMove(): i32 {
   return lib.symbols.GetMouseWheelMove();
 }
 
@@ -1872,28 +1864,28 @@ export function GetMouseWheelMoveV(): Vector2 {
 /**
  * Set mouse cursor
  */
-export function SetMouseCursor(cursor: number): void {
+export function SetMouseCursor(cursor: i32): void {
   lib.symbols.SetMouseCursor(cursor);
 }
 
 /**
  * Get touch position X for touch point 0 (relative to screen size)
  */
-export function GetTouchX(): number {
+export function GetTouchX(): i32 {
   return lib.symbols.GetTouchX();
 }
 
 /**
  * Get touch position Y for touch point 0 (relative to screen size)
  */
-export function GetTouchY(): number {
+export function GetTouchY(): i32 {
   return lib.symbols.GetTouchY();
 }
 
 /**
  * Get touch position XY for a given touch point index (relative to screen size)
  */
-export function GetTouchPosition(index: number): Vector2 {
+export function GetTouchPosition(index: i32): Vector2 {
   return Vector2.fromBuffer(
     lib.symbols.GetTouchPosition(index).buffer as ArrayBuffer
   );
@@ -1902,14 +1894,14 @@ export function GetTouchPosition(index: number): Vector2 {
 /**
  * Get touch point identifier for given index
  */
-export function GetTouchPointId(index: number): number {
+export function GetTouchPointId(index: i32): i32 {
   return lib.symbols.GetTouchPointId(index);
 }
 
 /**
  * Get number of touch points
  */
-export function GetTouchPointCount(): number {
+export function GetTouchPointCount(): i32 {
   return lib.symbols.GetTouchPointCount();
 }
 
@@ -1953,14 +1945,14 @@ export const GAMEPAD_AXIS_RIGHT_TRIGGER = 5;
 /**
  * Check if a gamepad is available
  */
-export function IsGamepadAvailable(gamepad: number): boolean {
+export function IsGamepadAvailable(gamepad: i32): boolean {
   return !!lib.symbols.IsGamepadAvailable(gamepad);
 }
 
 /**
  * Get gamepad internal name id
  */
-export function GetGamepadName(gamepad: number): string {
+export function GetGamepadName(gamepad: i32): string {
   const ptr = lib.symbols.GetGamepadName(gamepad);
   if (ptr) {
     return new Deno.UnsafePointerView(ptr).getCString();
@@ -1971,62 +1963,56 @@ export function GetGamepadName(gamepad: number): string {
 /**
  * Check if a gamepad button has been pressed once
  */
-export function IsGamepadButtonPressed(
-  gamepad: number,
-  button: number
-): boolean {
+export function IsGamepadButtonPressed(gamepad: i32, button: i32): boolean {
   return !!lib.symbols.IsGamepadButtonPressed(gamepad, button);
 }
 
 /**
  * Check if a gamepad button is being pressed
  */
-export function IsGamepadButtonDown(gamepad: number, button: number): boolean {
+export function IsGamepadButtonDown(gamepad: i32, button: i32): boolean {
   return !!lib.symbols.IsGamepadButtonDown(gamepad, button);
 }
 
 /**
  * Check if a gamepad button has been released once
  */
-export function IsGamepadButtonReleased(
-  gamepad: number,
-  button: number
-): boolean {
+export function IsGamepadButtonReleased(gamepad: i32, button: i32): boolean {
   return !!lib.symbols.IsGamepadButtonReleased(gamepad, button);
 }
 
 /**
  * Check if a gamepad button is NOT being pressed
  */
-export function IsGamepadButtonUp(gamepad: number, button: number): boolean {
+export function IsGamepadButtonUp(gamepad: i32, button: i32): boolean {
   return !!lib.symbols.IsGamepadButtonUp(gamepad, button);
 }
 
 /**
  * Get the last gamepad button pressed
  */
-export function GetGamepadButtonPressed(): number {
+export function GetGamepadButtonPressed(): i32 {
   return lib.symbols.GetGamepadButtonPressed();
 }
 
 /**
  * Get gamepad axis count for a gamepad
  */
-export function GetGamepadAxisCount(gamepad: number): number {
+export function GetGamepadAxisCount(gamepad: i32): i32 {
   return lib.symbols.GetGamepadAxisCount(gamepad);
 }
 
 /**
  * Get axis movement value for a gamepad axis
  */
-export function GetGamepadAxisMovement(gamepad: number, axis: number): number {
+export function GetGamepadAxisMovement(gamepad: i32, axis: i32): f32 {
   return lib.symbols.GetGamepadAxisMovement(gamepad, axis);
 }
 
 /**
  * Set internal gamepad mappings (SDL_GameControllerDB)
  */
-export function SetGamepadMappings(mappings: string): number {
+export function SetGamepadMappings(mappings: string): i32 {
   return lib.symbols.SetGamepadMappings(createStringBuffer(mappings));
 }
 
@@ -2044,9 +2030,9 @@ export function SetGamepadMappings(mappings: string): number {
  */
 export function DrawText(
   text: string,
-  posX: number,
-  posY: number,
-  fontSize: number,
+  posX: i32,
+  posY: i32,
+  fontSize: i32,
   color: Color
 ): void {
   lib.symbols.DrawText(
@@ -2058,7 +2044,7 @@ export function DrawText(
   );
 }
 
-export function DrawFPS(posX: number, posY: number): void {
+export function DrawFPS(posX: i32, posY: i32): void {
   lib.symbols.DrawFPS(posX, posY);
 }
 
@@ -2069,8 +2055,8 @@ export function DrawTextEx(
   font: { buffer: ArrayBuffer },
   text: string,
   position: Vector2,
-  fontSize: number,
-  spacing: number,
+  fontSize: i32,
+  spacing: i32,
   tint: Color
 ): void {
   lib.symbols.DrawTextEx(
@@ -2091,9 +2077,9 @@ export function DrawTextPro(
   text: string,
   position: Vector2,
   origin: Vector2,
-  rotation: number,
-  fontSize: number,
-  spacing: number,
+  rotation: f32,
+  fontSize: f32,
+  spacing: f32,
   tint: Color
 ): void {
   lib.symbols.DrawTextPro(
@@ -2113,9 +2099,9 @@ export function DrawTextPro(
  */
 export function DrawTextCodepoint(
   font: { buffer: ArrayBuffer },
-  codepoint: number,
+  codepoint: i32,
   position: Vector2,
-  fontSize: number,
+  fontSize: i32,
   tint: Color
 ): void {
   lib.symbols.DrawTextCodepoint(
@@ -2132,11 +2118,11 @@ export function DrawTextCodepoint(
  */
 export function DrawTextCodepoints(
   font: { buffer: ArrayBuffer },
-  codepoints: number[],
-  count: number,
+  codepoints: f32[],
+  count: i32,
   position: Vector2,
-  fontSize: number,
-  spacing: number,
+  fontSize: f32,
+  spacing: f32,
   tint: Color
 ): void {
   const buffer = new Uint32Array(codepoints);
@@ -2154,14 +2140,14 @@ export function DrawTextCodepoints(
 /**
  * Set vertical line spacing when drawing with line-breaks
  */
-export function SetTextLineSpacing(spacing: number): void {
+export function SetTextLineSpacing(spacing: i32): void {
   lib.symbols.SetTextLineSpacing(spacing);
 }
 
 /**
  * Measure string width for default font
  */
-export function MeasureText(text: string, fontSize: number): number {
+export function MeasureText(text: string, fontSize: i32): i32 {
   return lib.symbols.MeasureText(createStringBuffer(text), fontSize);
 }
 
@@ -2171,8 +2157,8 @@ export function MeasureText(text: string, fontSize: number): number {
 export function MeasureTextEx(
   font: { buffer: ArrayBuffer },
   text: string,
-  fontSize: number,
-  spacing: number
+  fontSize: f32,
+  spacing: f32
 ): Vector2 {
   return Vector2.fromBuffer(
     lib.symbols.MeasureTextEx(
@@ -2189,8 +2175,8 @@ export function MeasureTextEx(
  */
 export function GetGlyphIndex(
   font: { buffer: ArrayBuffer },
-  codepoint: number
-): number {
+  codepoint: i32
+): i32 {
   return lib.symbols.GetGlyphIndex(font.buffer, codepoint);
 }
 
@@ -2199,12 +2185,12 @@ export function GetGlyphIndex(
  */
 export function GetGlyphInfo(
   font: { buffer: ArrayBuffer },
-  codepoint: number
+  codepoint: i32
 ): {
-  value: number;
-  offsetX: number;
-  offsetY: number;
-  advanceX: number;
+  value: i32;
+  offsetX: i32;
+  offsetY: i32;
+  advanceX: i32;
   image: { buffer: ArrayBuffer };
 } {
   const result = lib.symbols.GetGlyphInfo(font.buffer, codepoint);
@@ -2223,7 +2209,7 @@ export function GetGlyphInfo(
  */
 export function GetGlyphAtlasRec(
   font: { buffer: ArrayBuffer },
-  codepoint: number
+  codepoint: i32
 ): Rectangle {
   return Rectangle.fromBuffer(
     lib.symbols.GetGlyphAtlasRec(font.buffer, codepoint).buffer
@@ -2233,7 +2219,7 @@ export function GetGlyphAtlasRec(
 /**
  * Load UTF-8 text encoded from codepoints array
  */
-export function LoadUTF8(codepoints: number[], length: number): string {
+export function LoadUTF8(codepoints: i32[], length: i32): string {
   const buffer = new Uint32Array(codepoints);
   const ptr = lib.symbols.LoadUTF8(
     Deno.UnsafePointer.of(buffer.buffer as ArrayBuffer),
@@ -2255,10 +2241,7 @@ export function UnloadUTF8(text: string): void {
 /**
  * Load all codepoints from a UTF-8 text string, codepoints count returned by parameter
  */
-export function LoadCodepoints(
-  text: string,
-  count: { value: number }
-): number[] {
+export function LoadCodepoints(text: string, count: { value: i32 }): i32[] {
   const buffer = new Uint32Array(1);
   const ptr = lib.symbols.LoadCodepoints(
     createStringBuffer(text),
@@ -2276,7 +2259,7 @@ export function LoadCodepoints(
 /**
  * Unload codepoints data from memory
  */
-export function UnloadCodepoints(codepoints: number[]): void {
+export function UnloadCodepoints(codepoints: i32[]): void {
   const buffer = new Uint32Array(codepoints);
   lib.symbols.UnloadCodepoints(Deno.UnsafePointer.of(buffer.buffer));
 }
@@ -2284,17 +2267,14 @@ export function UnloadCodepoints(codepoints: number[]): void {
 /**
  * Get total number of codepoints in a UTF-8 encoded string
  */
-export function GetCodepointCount(text: string): number {
+export function GetCodepointCount(text: string): i32 {
   return lib.symbols.GetCodepointCount(createStringBuffer(text));
 }
 
 /**
  * Get next codepoint in a UTF-8 encoded string, 0x3f('?') if not found
  */
-export function GetCodepoint(
-  text: string,
-  bytesSize: { value: number }
-): number {
+export function GetCodepoint(text: string, bytesSize: { value: i32 }): i32 {
   const buffer = new Uint32Array(1);
   const result = lib.symbols.GetCodepoint(
     createStringBuffer(text),
@@ -2308,8 +2288,8 @@ export function GetCodepoint(
  * Encode one codepoint into UTF-8 string (array of bytes), return byte count
  */
 export function CodepointToUTF8(
-  codepoint: number,
-  byteSize: { value: number }
+  codepoint: i32,
+  byteSize: { value: i32 }
 ): string {
   const buffer = new Uint32Array(1);
   const ptr = lib.symbols.CodepointToUTF8(
@@ -2326,7 +2306,7 @@ export function CodepointToUTF8(
 /**
  * Copy one string to another, returns bytes copied
  */
-export function TextCopy(dst: string, src: string): number {
+export function TextCopy(dst: string, src: string): i32 {
   return lib.symbols.TextCopy(createStringBuffer(dst), createStringBuffer(src));
 }
 
@@ -2343,7 +2323,7 @@ export function TextIsEqual(text1: string, text2: string): boolean {
 /**
  * Get text length, checks for '\0' ending
  */
-export function TextLength(text: string): number {
+export function TextLength(text: string): i32 {
   return lib.symbols.TextLength(createStringBuffer(text));
 }
 
@@ -2359,11 +2339,7 @@ export function TextFormat(text: string, ..._args: unknown[]): string {
 /**
  * Get a piece of a text string
  */
-export function TextSubtext(
-  text: string,
-  position: number,
-  length: number
-): string {
+export function TextSubtext(text: string, position: i32, length: i32): string {
   const ptr = lib.symbols.TextSubtext(
     createStringBuffer(text),
     position,
@@ -2396,7 +2372,7 @@ export function TextReplace(text: string, replace: string, by: string): string {
 export function TextInsert(
   text: string,
   insert: string,
-  position: number
+  position: i32
 ): string {
   const ptr = lib.symbols.TextInsert(
     createStringBuffer(text),
@@ -2414,7 +2390,7 @@ export function TextInsert(
  */
 export function TextJoin(
   textList: string[],
-  count: number,
+  count: i32,
   delimiter: string
 ): string {
   // Create array of string pointers
@@ -2443,8 +2419,8 @@ export function TextJoin(
  */
 export function TextSplit(
   text: string,
-  delimiter: number,
-  _count: { value: number }
+  delimiter: i8,
+  _count: { value: f32 }
 ): string[] {
   const buffer = new Uint32Array(1);
   const ptr = lib.symbols.TextSplit(
@@ -2477,7 +2453,7 @@ export function TextSplit(
 export function TextAppend(
   text: string,
   append: string,
-  _position: { value: number }
+  _position: { value: f32 }
 ): void {
   const buffer = new Uint32Array(1);
   lib.symbols.TextAppend(
@@ -2490,7 +2466,7 @@ export function TextAppend(
 /**
  * Find first text occurrence within a string
  */
-export function TextFindIndex(text: string, find: string): number {
+export function TextFindIndex(text: string, find: string): i32 {
   return lib.symbols.TextFindIndex(
     createStringBuffer(text),
     createStringBuffer(find)
@@ -2533,7 +2509,7 @@ export function TextToPascal(text: string): string {
 /**
  * Get integer value from text (negative values not supported)
  */
-export function TextToInteger(text: string): number {
+export function TextToInteger(text: string): i32 {
   return lib.symbols.TextToInteger(createStringBuffer(text));
 }
 
@@ -2572,9 +2548,9 @@ export function LoadFont(fileName: string): Font {
  */
 export function LoadFontEx(
   fileName: string,
-  fontSize: number,
-  fontChars: number[],
-  glyphCount: number
+  fontSize: i32,
+  fontChars: f32[],
+  glyphCount: i32
 ): Font {
   const buffer = new Uint32Array(fontChars);
   return {
@@ -2593,7 +2569,7 @@ export function LoadFontEx(
 export function LoadFontFromImage(
   image: Image,
   key: Color,
-  firstChar: number
+  firstChar: i32
 ): Font {
   return {
     buffer: lib.symbols.LoadFontFromImage(image.buffer, key.buffer, firstChar)
@@ -2607,10 +2583,10 @@ export function LoadFontFromImage(
 export function LoadFontFromMemory(
   fileType: string,
   fileData: Uint8Array,
-  dataSize: number,
-  fontSize: number,
-  fontChars: number[],
-  glyphCount: number
+  dataSize: i32,
+  fontSize: i32,
+  fontChars: f32[],
+  glyphCount: i32
 ): Font {
   const buffer = new Uint32Array(fontChars);
   return {
@@ -2640,11 +2616,11 @@ export function IsFontReady(font: Font): boolean {
  */
 export function LoadFontData(
   fileData: Uint8Array,
-  dataSize: number,
-  fontSize: number,
-  fontChars: number[],
-  glyphCount: number,
-  type: number
+  dataSize: i32,
+  fontSize: i32,
+  fontChars: f32[],
+  glyphCount: i32,
+  type: i32
 ): { buffer: ArrayBuffer }[] {
   const buffer = new Uint32Array(fontChars);
   const ptr = lib.symbols.LoadFontData(
@@ -2686,10 +2662,10 @@ export function LoadFontData(
 export function GenImageFontAtlas(
   chars: { buffer: ArrayBuffer }[],
   recs: Rectangle[],
-  glyphCount: number,
-  fontSize: number,
-  padding: number,
-  packMethod: number
+  glyphCount: i32,
+  fontSize: i32,
+  padding: i32,
+  packMethod: i32
 ): Image {
   const recsBuffer = new Float32Array(recs.length * 4);
   for (let i = 0; i < recs.length; i++) {
@@ -2724,7 +2700,7 @@ export function GenImageFontAtlas(
  */
 export function UnloadFontData(
   chars: { buffer: ArrayBuffer }[],
-  glyphCount: number
+  glyphCount: i32
 ): void {
   // Create array of glyph pointers
   const glyphPointers = new BigUint64Array(glyphCount);
@@ -2772,10 +2748,10 @@ export function ExportFontAsCode(font: Font, fileName: string): boolean {
 export class Image {
   constructor(
     public data: Uint8Array,
-    public width: number,
-    public height: number,
-    public mipmaps: number,
-    public format: number
+    public width: i32,
+    public height: i32,
+    public mipmaps: i32,
+    public format: i32
   ) {}
 
   static fromBuffer(buffer: ArrayBuffer): Image {
@@ -2839,10 +2815,10 @@ export function LoadImage(fileName: string): Image {
  */
 export function LoadImageRaw(
   fileName: string,
-  width: number,
-  height: number,
-  format: number,
-  headerSize: number
+  width: i32,
+  height: i32,
+  format: i32,
+  headerSize: i32
 ): Image {
   return Image.fromBuffer(
     lib.symbols.LoadImageRaw(
@@ -2860,7 +2836,7 @@ export function LoadImageRaw(
  */
 export function LoadImageAnim(
   fileName: string,
-  _frames: { value: number }
+  _frames: { value: i32 }
 ): Image {
   const buffer = new Uint32Array(1);
   return Image.fromBuffer(
@@ -2877,7 +2853,7 @@ export function LoadImageAnim(
 export function LoadImageFromMemory(
   fileType: string,
   fileData: Uint8Array,
-  dataSize: number
+  dataSize: i32
 ): Image {
   return Image.fromBuffer(
     lib.symbols.LoadImageFromMemory(
@@ -2933,7 +2909,7 @@ export function ExportImage(image: Image, fileName: string): boolean {
 export function ExportImageToMemory(
   image: Image,
   fileType: string,
-  fileSize: { value: number }
+  fileSize: { value: i32 }
 ): Uint8Array {
   const buffer = new Uint32Array(1);
   const ptr = lib.symbols.ExportImageToMemory(
@@ -2962,11 +2938,7 @@ export function ExportImageAsCode(image: Image, fileName: string): boolean {
 /**
  * Generate image: plain color
  */
-export function GenImageColor(
-  width: number,
-  height: number,
-  color: Color
-): Image {
+export function GenImageColor(width: i32, height: i32, color: Color): Image {
   return Image.fromBuffer(
     lib.symbols.GenImageColor(width, height, color.buffer as ArrayBuffer).buffer
   );
@@ -2976,9 +2948,9 @@ export function GenImageColor(
  * Generate image: linear gradient, direction in degrees [0..360], 0=Vertical, 90=Horizontal
  */
 export function GenImageGradientLinear(
-  width: number,
-  height: number,
-  direction: number,
+  width: i32,
+  height: i32,
+  direction: i32,
   start: Color,
   end: Color
 ): Image {
@@ -2997,9 +2969,9 @@ export function GenImageGradientLinear(
  * Generate image: radial gradient
  */
 export function GenImageGradientRadial(
-  width: number,
-  height: number,
-  density: number,
+  width: i32,
+  height: i32,
+  density: f32,
   inner: Color,
   outer: Color
 ): Image {
@@ -3018,9 +2990,9 @@ export function GenImageGradientRadial(
  * Generate image: square gradient
  */
 export function GenImageGradientSquare(
-  width: number,
-  height: number,
-  density: number,
+  width: i32,
+  height: i32,
+  density: f32,
   inner: Color,
   outer: Color
 ): Image {
@@ -3039,10 +3011,10 @@ export function GenImageGradientSquare(
  * Generate image: checked
  */
 export function GenImageChecked(
-  width: number,
-  height: number,
-  checksX: number,
-  checksY: number,
+  width: i32,
+  height: i32,
+  checksX: i32,
+  checksY: i32,
   col1: Color,
   col2: Color
 ): Image {
@@ -3062,9 +3034,9 @@ export function GenImageChecked(
  * Generate image: white noise
  */
 export function GenImageWhiteNoise(
-  width: number,
-  height: number,
-  factor: number
+  width: i32,
+  height: i32,
+  factor: f32
 ): Image {
   return Image.fromBuffer(
     lib.symbols.GenImageWhiteNoise(width, height, factor).buffer
@@ -3075,11 +3047,11 @@ export function GenImageWhiteNoise(
  * Generate image: perlin noise
  */
 export function GenImagePerlinNoise(
-  width: number,
-  height: number,
-  offsetX: number,
-  offsetY: number,
-  scale: number
+  width: i32,
+  height: i32,
+  offsetX: i32,
+  offsetY: i32,
+  scale: f32
 ): Image {
   return Image.fromBuffer(
     lib.symbols.GenImagePerlinNoise(width, height, offsetX, offsetY, scale)
@@ -3091,9 +3063,9 @@ export function GenImagePerlinNoise(
  * Generate image: cellular algorithm. Bigger tileSize means bigger cells
  */
 export function GenImageCellular(
-  width: number,
-  height: number,
-  tileSize: number
+  width: i32,
+  height: i32,
+  tileSize: i32
 ): Image {
   return Image.fromBuffer(
     lib.symbols.GenImageCellular(width, height, tileSize).buffer
@@ -3103,11 +3075,7 @@ export function GenImageCellular(
 /**
  * Generate image: grayscale image from text data
  */
-export function GenImageText(
-  width: number,
-  height: number,
-  text: string
-): Image {
+export function GenImageText(width: i32, height: i32, text: string): Image {
   return Image.fromBuffer(
     lib.symbols.GenImageText(width, height, createStringBuffer(text)).buffer
   );
@@ -3134,7 +3102,7 @@ export function ImageFromImage(image: Image, rec: Rectangle): Image {
 /**
  * Create an image from text (default font)
  */
-export function ImageText(text: string, fontSize: number, color: Color): Image {
+export function ImageText(text: string, fontSize: i32, color: Color): Image {
   return Image.fromBuffer(
     lib.symbols.ImageText(
       createStringBuffer(text),
@@ -3150,8 +3118,8 @@ export function ImageText(text: string, fontSize: number, color: Color): Image {
 export function ImageTextEx(
   font: { buffer: ArrayBuffer },
   text: string,
-  fontSize: number,
-  spacing: number,
+  fontSize: f32,
+  spacing: f32,
   tint: Color
 ): Image {
   return Image.fromBuffer(
@@ -3168,7 +3136,7 @@ export function ImageTextEx(
 /**
  * Convert image data to desired format
  */
-export function ImageFormat(image: Image, newFormat: number): void {
+export function ImageFormat(image: Image, newFormat: i32): void {
   lib.symbols.ImageFormat(Deno.UnsafePointer.of(image.buffer), newFormat);
 }
 
@@ -3195,7 +3163,7 @@ export function ImageCrop(image: Image, crop: Rectangle): void {
 /**
  * Crop image depending on alpha value
  */
-export function ImageAlphaCrop(image: Image, threshold: number): void {
+export function ImageAlphaCrop(image: Image, threshold: f32): void {
   lib.symbols.ImageAlphaCrop(Deno.UnsafePointer.of(image.buffer), threshold);
 }
 
@@ -3205,7 +3173,7 @@ export function ImageAlphaCrop(image: Image, threshold: number): void {
 export function ImageAlphaClear(
   image: Image,
   color: Color,
-  threshold: number
+  threshold: f32
 ): void {
   lib.symbols.ImageAlphaClear(
     Deno.UnsafePointer.of(image.buffer),
@@ -3234,18 +3202,14 @@ export function ImageAlphaPremultiply(image: Image): void {
 /**
  * Apply Gaussian blur using a box blur approximation
  */
-export function ImageBlurGaussian(image: Image, blurSize: number): void {
+export function ImageBlurGaussian(image: Image, blurSize: i32): void {
   lib.symbols.ImageBlurGaussian(Deno.UnsafePointer.of(image.buffer), blurSize);
 }
 
 /**
  * Resize image (Bicubic scaling algorithm)
  */
-export function ImageResize(
-  image: Image,
-  newWidth: number,
-  newHeight: number
-): void {
+export function ImageResize(image: Image, newWidth: i32, newHeight: i32): void {
   lib.symbols.ImageResize(
     Deno.UnsafePointer.of(image.buffer),
     newWidth,
@@ -3258,8 +3222,8 @@ export function ImageResize(
  */
 export function ImageResizeNN(
   image: Image,
-  newWidth: number,
-  newHeight: number
+  newWidth: i32,
+  newHeight: i32
 ): void {
   lib.symbols.ImageResizeNN(
     Deno.UnsafePointer.of(image.buffer),
@@ -3273,10 +3237,10 @@ export function ImageResizeNN(
  */
 export function ImageResizeCanvas(
   image: Image,
-  newWidth: number,
-  newHeight: number,
-  offsetX: number,
-  offsetY: number,
+  newWidth: i32,
+  newHeight: i32,
+  offsetX: i32,
+  offsetY: i32,
   fill: Color
 ): void {
   lib.symbols.ImageResizeCanvas(
@@ -3301,10 +3265,10 @@ export function ImageMipmaps(image: Image): void {
  */
 export function ImageDither(
   image: Image,
-  rBpp: number,
-  gBpp: number,
-  bBpp: number,
-  aBpp: number
+  rBpp: i32,
+  gBpp: i32,
+  bBpp: i32,
+  aBpp: i32
 ): void {
   lib.symbols.ImageDither(
     Deno.UnsafePointer.of(image.buffer),
@@ -3332,7 +3296,7 @@ export function ImageFlipHorizontal(image: Image): void {
 /**
  * Rotate image by input angle in degrees (-359 to +359)
  */
-export function ImageRotate(image: Image, degrees: number): void {
+export function ImageRotate(image: Image, degrees: i32): void {
   lib.symbols.ImageRotate(Deno.UnsafePointer.of(image.buffer), degrees);
 }
 
@@ -3377,14 +3341,14 @@ export function ImageColorGrayscale(image: Image): void {
 /**
  * Modify image color: contrast (-100 to 100)
  */
-export function ImageColorContrast(image: Image, contrast: number): void {
+export function ImageColorContrast(image: Image, contrast: f32): void {
   lib.symbols.ImageColorContrast(Deno.UnsafePointer.of(image.buffer), contrast);
 }
 
 /**
  * Modify image color: brightness (-255 to 255)
  */
-export function ImageColorBrightness(image: Image, brightness: number): void {
+export function ImageColorBrightness(image: Image, brightness: f32): void {
   lib.symbols.ImageColorBrightness(
     Deno.UnsafePointer.of(image.buffer),
     brightness
@@ -3433,8 +3397,8 @@ export function LoadImageColors(image: Image): Color[] {
  */
 export function LoadImagePalette(
   image: Image,
-  maxPaletteSize: number,
-  _colorCount: { value: number }
+  maxPaletteSize: i32,
+  _colorCount: { value: f32 }
 ): Color[] {
   const buffer = new Uint32Array(1);
   const ptr = lib.symbols.LoadImagePalette(
@@ -3476,10 +3440,7 @@ export function UnloadImagePalette(_colors: Color[]): void {
 /**
  * Get image alpha border rectangle
  */
-export function GetImageAlphaBorder(
-  image: Image,
-  threshold: number
-): Rectangle {
+export function GetImageAlphaBorder(image: Image, threshold: f32): Rectangle {
   return Rectangle.fromBuffer(
     lib.symbols.GetImageAlphaBorder(image.buffer, threshold).buffer
   );
@@ -3488,7 +3449,7 @@ export function GetImageAlphaBorder(
 /**
  * Get image pixel color at (x, y) position
  */
-export function GetImageColor(image: Image, x: number, y: number): Color {
+export function GetImageColor(image: Image, x: i32, y: i32): Color {
   return Color.fromBuffer(
     lib.symbols.GetImageColor(image.buffer, x, y).buffer as ArrayBuffer
   );
@@ -3509,8 +3470,8 @@ export function ImageClearBackground(image: Image, color: Color): void {
  */
 export function ImageDrawPixel(
   image: Image,
-  posX: number,
-  posY: number,
+  posX: i32,
+  posY: i32,
   color: Color
 ): void {
   lib.symbols.ImageDrawPixel(
@@ -3541,10 +3502,10 @@ export function ImageDrawPixelV(
  */
 export function ImageDrawLine(
   image: Image,
-  startPosX: number,
-  startPosY: number,
-  endPosX: number,
-  endPosY: number,
+  startPosX: i32,
+  startPosY: i32,
+  endPosX: i32,
+  endPosY: i32,
   color: Color
 ): void {
   lib.symbols.ImageDrawLine(
@@ -3579,9 +3540,9 @@ export function ImageDrawLineV(
  */
 export function ImageDrawCircle(
   image: Image,
-  centerX: number,
-  centerY: number,
-  radius: number,
+  centerX: i32,
+  centerY: i32,
+  radius: i32,
   color: Color
 ): void {
   lib.symbols.ImageDrawCircle(
@@ -3599,7 +3560,7 @@ export function ImageDrawCircle(
 export function ImageDrawCircleV(
   image: Image,
   center: Vector2,
-  radius: number,
+  radius: i32,
   color: Color
 ): void {
   lib.symbols.ImageDrawCircleV(
@@ -3615,10 +3576,10 @@ export function ImageDrawCircleV(
  */
 export function ImageDrawRectangle(
   image: Image,
-  posX: number,
-  posY: number,
-  width: number,
-  height: number,
+  posX: i32,
+  posY: i32,
+  width: i32,
+  height: i32,
   color: Color
 ): void {
   lib.symbols.ImageDrawRectangle(
@@ -3669,7 +3630,7 @@ export function ImageDrawRectangleRec(
 export function ImageDrawRectangleLines(
   image: Image,
   rec: Rectangle,
-  thick: number,
+  thick: i32,
   color: Color
 ): void {
   lib.symbols.ImageDrawRectangleLines(
@@ -3705,9 +3666,9 @@ export function ImageDraw(
 export function ImageDrawText(
   dst: Image,
   text: string,
-  posX: number,
-  posY: number,
-  fontSize: number,
+  posX: i32,
+  posY: i32,
+  fontSize: i32,
   color: Color
 ): void {
   lib.symbols.ImageDrawText(
@@ -3728,8 +3689,8 @@ export function ImageDrawTextEx(
   font: { buffer: ArrayBuffer },
   text: string,
   position: Vector2,
-  fontSize: number,
-  spacing: number,
+  fontSize: f32,
+  spacing: f32,
   tint: Color
 ): void {
   lib.symbols.ImageDrawTextEx(
@@ -3757,11 +3718,11 @@ export function ImageDrawTextEx(
  */
 export class Texture2D {
   constructor(
-    public id: number,
-    public width: number,
-    public height: number,
-    public mipmaps: number,
-    public format: number
+    public id: i32,
+    public width: i32,
+    public height: i32,
+    public mipmaps: i32,
+    public format: i32
   ) {}
 
   static fromBuffer(buffer: ArrayBuffer): Texture2D {
@@ -3792,7 +3753,7 @@ export class Texture2D {
  */
 export class RenderTexture2D {
   constructor(
-    public id: number,
+    public id: i32,
     public texture: Texture2D,
     public depth: Texture2D
   ) {}
@@ -3857,7 +3818,7 @@ export function LoadTextureFromImage(image: {
  */
 export function LoadTextureCubemap(
   image: { buffer: ArrayBuffer },
-  layout: number
+  layout: i32
 ): Texture2D {
   return Texture2D.fromBuffer(
     lib.symbols.LoadTextureCubemap(image.buffer, layout).buffer
@@ -3867,10 +3828,7 @@ export function LoadTextureCubemap(
 /**
  * Load texture for rendering (framebuffer)
  */
-export function LoadRenderTexture(
-  width: number,
-  height: number
-): RenderTexture2D {
+export function LoadRenderTexture(width: i32, height: i32): RenderTexture2D {
   return RenderTexture2D.fromBuffer(
     lib.symbols.LoadRenderTexture(width, height).buffer
   );
@@ -3932,14 +3890,14 @@ export function GenTextureMipmaps(texture: Texture2D): void {
 /**
  * Set texture scaling filter mode
  */
-export function SetTextureFilter(texture: Texture2D, filter: number): void {
+export function SetTextureFilter(texture: Texture2D, filter: i32): void {
   lib.symbols.SetTextureFilter(texture.buffer, filter);
 }
 
 /**
  * Set texture wrapping mode
  */
-export function SetTextureWrap(texture: Texture2D, wrap: number): void {
+export function SetTextureWrap(texture: Texture2D, wrap: i32): void {
   lib.symbols.SetTextureWrap(texture.buffer, wrap);
 }
 
@@ -3948,8 +3906,8 @@ export function SetTextureWrap(texture: Texture2D, wrap: number): void {
  */
 export function DrawTexture(
   texture: Texture2D,
-  posX: number,
-  posY: number,
+  posX: i32,
+  posY: i32,
   tint: Color
 ): void {
   lib.symbols.DrawTexture(
@@ -3981,8 +3939,8 @@ export function DrawTextureV(
 export function DrawTextureEx(
   texture: Texture2D,
   position: Vector2,
-  rotation: number,
-  scale: number,
+  rotation: f32,
+  scale: f32,
   tint: Color
 ): void {
   lib.symbols.DrawTextureEx(
@@ -4019,7 +3977,7 @@ export function DrawTexturePro(
   source: Rectangle,
   dest: Rectangle,
   origin: Vector2,
-  rotation: number,
+  rotation: f32,
   tint: Color
 ): void {
   lib.symbols.DrawTexturePro(
@@ -4040,7 +3998,7 @@ export function DrawTextureNPatch(
   nPatchInfo: { buffer: ArrayBuffer },
   dest: Rectangle,
   origin: Vector2,
-  rotation: number,
+  rotation: f32,
   tint: Color
 ): void {
   lib.symbols.DrawTextureNPatch(
@@ -4056,7 +4014,7 @@ export function DrawTextureNPatch(
 /**
  * Get color with alpha applied, alpha goes from 0.0f to 1.0f
  */
-export function Fade(color: Color, alpha: number): Color {
+export function Fade(color: Color, alpha: f32): Color {
   return Color.fromBuffer(
     lib.symbols.Fade(color.buffer, alpha).buffer as ArrayBuffer
   );
@@ -4065,7 +4023,7 @@ export function Fade(color: Color, alpha: number): Color {
 /**
  * Get hexadecimal value for a Color
  */
-export function ColorToInt(color: Color): number {
+export function ColorToInt(color: Color): i32 {
   return lib.symbols.ColorToInt(color.buffer as ArrayBuffer);
 }
 
@@ -4100,11 +4058,7 @@ export function ColorToHSV(color: Color): Vector3 {
 /**
  * Get a Color from HSV values, hue [0..360], saturation/value [0..1]
  */
-export function ColorFromHSV(
-  hue: number,
-  saturation: number,
-  value: number
-): Color {
+export function ColorFromHSV(hue: f32, saturation: f32, value: f32): Color {
   return Color.fromBuffer(
     lib.symbols.ColorFromHSV(hue, saturation, value).buffer
   );
@@ -4122,7 +4076,7 @@ export function ColorTint(color: Color, tint: Color): Color {
 /**
  * Get color with brightness correction, brightness goes from -1.0f to 1.0f
  */
-export function ColorBrightness(color: Color, factor: number): Color {
+export function ColorBrightness(color: Color, factor: f32): Color {
   return Color.fromBuffer(
     lib.symbols.ColorBrightness(color.buffer, factor).buffer
   );
@@ -4131,7 +4085,7 @@ export function ColorBrightness(color: Color, factor: number): Color {
 /**
  * Get color with contrast correction, contrast values between -1.0f and 1.0f
  */
-export function ColorContrast(color: Color, contrast: number): Color {
+export function ColorContrast(color: Color, contrast: f32): Color {
   return Color.fromBuffer(
     lib.symbols.ColorContrast(color.buffer, contrast).buffer
   );
@@ -4140,7 +4094,7 @@ export function ColorContrast(color: Color, contrast: number): Color {
 /**
  * Get color with alpha applied, alpha goes from 0.0f to 1.0f
  */
-export function ColorAlpha(color: Color, alpha: number): Color {
+export function ColorAlpha(color: Color, alpha: f32): Color {
   return Color.fromBuffer(
     lib.symbols.ColorAlpha(color.buffer, alpha).buffer as ArrayBuffer
   );
@@ -4162,14 +4116,14 @@ export function ColorAlphaBlend(dst: Color, src: Color, tint: Color): Color {
 /**
  * Get Color structure from hexadecimal value
  */
-export function GetColor(hexValue: number): Color {
+export function GetColor(hexValue: u32): Color {
   return Color.fromBuffer(lib.symbols.GetColor(hexValue).buffer as ArrayBuffer);
 }
 
 /**
  * Get Color from a source pixel pointer of certain format
  */
-export function GetPixelColor(srcPtr: Uint8Array, format: number): Color {
+export function GetPixelColor(srcPtr: Uint8Array, format: i32): Color {
   return Color.fromBuffer(
     lib.symbols.GetPixelColor(
       Deno.UnsafePointer.of(srcPtr.buffer as ArrayBuffer),
@@ -4184,7 +4138,7 @@ export function GetPixelColor(srcPtr: Uint8Array, format: number): Color {
 export function SetPixelColor(
   dstPtr: Uint8Array,
   color: Color,
-  format: number
+  format: i32
 ): void {
   lib.symbols.SetPixelColor(
     Deno.UnsafePointer.of(dstPtr.buffer as ArrayBuffer),
@@ -4196,11 +4150,7 @@ export function SetPixelColor(
 /**
  * Get pixel data size in bytes for certain format
  */
-export function GetPixelDataSize(
-  width: number,
-  height: number,
-  format: number
-): number {
+export function GetPixelDataSize(width: i32, height: i32, format: i32): i32 {
   return lib.symbols.GetPixelDataSize(width, height, format);
 }
 
@@ -4216,7 +4166,7 @@ export function GetPixelDataSize(
 /**
  * Draw a pixel
  */
-export function DrawPixel(posX: number, posY: number, color: Color): void {
+export function DrawPixel(posX: i32, posY: i32, color: Color): void {
   lib.symbols.DrawPixel(posX, posY, color.buffer as ArrayBuffer);
 }
 
@@ -4231,10 +4181,10 @@ export function DrawPixelV(position: Vector2, color: Color): void {
  * Draw a line
  */
 export function DrawLine(
-  startPosX: number,
-  startPosY: number,
-  endPosX: number,
-  endPosY: number,
+  startPosX: i32,
+  startPosY: i32,
+  endPosX: i32,
+  endPosY: i32,
   color: Color
 ): void {
   lib.symbols.DrawLine(
@@ -4267,7 +4217,7 @@ export function DrawLineV(
 export function DrawLineEx(
   startPos: Vector2,
   endPos: Vector2,
-  thick: number,
+  thick: f32,
   color: Color
 ): void {
   lib.symbols.DrawLineEx(
@@ -4283,7 +4233,7 @@ export function DrawLineEx(
  */
 export function DrawLineStrip(
   points: Vector2[],
-  pointCount: number,
+  pointCount: i32,
   color: Color
 ): void {
   const buffer = concatVector2s(points);
@@ -4300,7 +4250,7 @@ export function DrawLineStrip(
 export function DrawLineBezier(
   startPos: Vector2,
   endPos: Vector2,
-  thick: number,
+  thick: f32,
   color: Color
 ): void {
   lib.symbols.DrawLineBezier(
@@ -4315,9 +4265,9 @@ export function DrawLineBezier(
  * Draw a color-filled circle
  */
 export function DrawCircle(
-  centerX: number,
-  centerY: number,
-  radius: number,
+  centerX: i32,
+  centerY: i32,
+  radius: f32,
   color: Color
 ): void {
   lib.symbols.DrawCircle(centerX, centerY, radius, color.buffer as ArrayBuffer);
@@ -4328,10 +4278,10 @@ export function DrawCircle(
  */
 export function DrawCircleSector(
   center: Vector2,
-  radius: number,
-  startAngle: number,
-  endAngle: number,
-  segments: number,
+  radius: f32,
+  startAngle: f32,
+  endAngle: f32,
+  segments: i32,
   color: Color
 ): void {
   lib.symbols.DrawCircleSector(
@@ -4349,10 +4299,10 @@ export function DrawCircleSector(
  */
 export function DrawCircleSectorLines(
   center: Vector2,
-  radius: number,
-  startAngle: number,
-  endAngle: number,
-  segments: number,
+  radius: f32,
+  startAngle: f32,
+  endAngle: f32,
+  segments: i32,
   color: Color
 ): void {
   lib.symbols.DrawCircleSectorLines(
@@ -4369,9 +4319,9 @@ export function DrawCircleSectorLines(
  * Draw a gradient-filled circle
  */
 export function DrawCircleGradient(
-  centerX: number,
-  centerY: number,
-  radius: number,
+  centerX: i32,
+  centerY: i32,
+  radius: f32,
   color1: Color,
   color2: Color
 ): void {
@@ -4387,11 +4337,7 @@ export function DrawCircleGradient(
 /**
  * Draw a color-filled circle (Vector version)
  */
-export function DrawCircleV(
-  center: Vector2,
-  radius: number,
-  color: Color
-): void {
+export function DrawCircleV(center: Vector2, radius: f32, color: Color): void {
   lib.symbols.DrawCircleV(center.buffer, radius, color.buffer as ArrayBuffer);
 }
 
@@ -4399,9 +4345,9 @@ export function DrawCircleV(
  * Draw circle outline
  */
 export function DrawCircleLines(
-  centerX: number,
-  centerY: number,
-  radius: number,
+  centerX: i32,
+  centerY: i32,
+  radius: f32,
   color: Color
 ): void {
   lib.symbols.DrawCircleLines(
@@ -4417,7 +4363,7 @@ export function DrawCircleLines(
  */
 export function DrawCircleLinesV(
   center: Vector2,
-  radius: number,
+  radius: f32,
   color: Color
 ): void {
   lib.symbols.DrawCircleLinesV(
@@ -4431,10 +4377,10 @@ export function DrawCircleLinesV(
  * Draw ellipse
  */
 export function DrawEllipse(
-  centerX: number,
-  centerY: number,
-  radiusH: number,
-  radiusV: number,
+  centerX: i32,
+  centerY: i32,
+  radiusH: f32,
+  radiusV: f32,
   color: Color
 ): void {
   lib.symbols.DrawEllipse(
@@ -4450,10 +4396,10 @@ export function DrawEllipse(
  * Draw ellipse outline
  */
 export function DrawEllipseLines(
-  centerX: number,
-  centerY: number,
-  radiusH: number,
-  radiusV: number,
+  centerX: i32,
+  centerY: i32,
+  radiusH: f32,
+  radiusV: f32,
   color: Color
 ): void {
   lib.symbols.DrawEllipseLines(
@@ -4470,11 +4416,11 @@ export function DrawEllipseLines(
  */
 export function DrawRing(
   center: Vector2,
-  innerRadius: number,
-  outerRadius: number,
-  startAngle: number,
-  endAngle: number,
-  segments: number,
+  innerRadius: f32,
+  outerRadius: f32,
+  startAngle: f32,
+  endAngle: f32,
+  segments: i32,
   color: Color
 ): void {
   lib.symbols.DrawRing(
@@ -4493,11 +4439,11 @@ export function DrawRing(
  */
 export function DrawRingLines(
   center: Vector2,
-  innerRadius: number,
-  outerRadius: number,
-  startAngle: number,
-  endAngle: number,
-  segments: number,
+  innerRadius: f32,
+  outerRadius: f32,
+  startAngle: f32,
+  endAngle: f32,
+  segments: i32,
   color: Color
 ): void {
   lib.symbols.DrawRingLines(
@@ -4515,10 +4461,10 @@ export function DrawRingLines(
  * Draw a color-filled rectangle
  */
 export function DrawRectangle(
-  posX: number,
-  posY: number,
-  width: number,
-  height: number,
+  posX: i32,
+  posY: i32,
+  width: i32,
+  height: i32,
   color: Color
 ): void {
   lib.symbols.DrawRectangle(
@@ -4558,7 +4504,7 @@ export function DrawRectangleRec(rect: Rectangle, color: Color): void {
 export function DrawRectanglePro(
   rect: Rectangle,
   origin: Vector2,
-  rotation: number,
+  rotation: f32,
   color: Color
 ): void {
   lib.symbols.DrawRectanglePro(
@@ -4573,10 +4519,10 @@ export function DrawRectanglePro(
  * Draw a vertical-gradient-filled rectangle
  */
 export function DrawRectangleGradientV(
-  posX: number,
-  posY: number,
-  width: number,
-  height: number,
+  posX: i32,
+  posY: i32,
+  width: i32,
+  height: i32,
   color1: Color,
   color2: Color
 ): void {
@@ -4594,10 +4540,10 @@ export function DrawRectangleGradientV(
  * Draw a horizontal-gradient-filled rectangle
  */
 export function DrawRectangleGradientH(
-  posX: number,
-  posY: number,
-  width: number,
-  height: number,
+  posX: i32,
+  posY: i32,
+  width: i32,
+  height: i32,
   color1: Color,
   color2: Color
 ): void {
@@ -4634,10 +4580,10 @@ export function DrawRectangleGradientEx(
  * Draw rectangle outline
  */
 export function DrawRectangleLines(
-  posX: number,
-  posY: number,
-  width: number,
-  height: number,
+  posX: i32,
+  posY: i32,
+  width: i32,
+  height: i32,
   color: Color
 ): void {
   lib.symbols.DrawRectangleLines(
@@ -4654,7 +4600,7 @@ export function DrawRectangleLines(
  */
 export function DrawRectangleLinesEx(
   rect: Rectangle,
-  lineThick: number,
+  lineThick: f32,
   color: Color
 ): void {
   lib.symbols.DrawRectangleLinesEx(
@@ -4669,8 +4615,8 @@ export function DrawRectangleLinesEx(
  */
 export function DrawRectangleRounded(
   rect: Rectangle,
-  roundness: number,
-  segments: number,
+  roundness: f32,
+  segments: i32,
   color: Color
 ): void {
   lib.symbols.DrawRectangleRounded(
@@ -4686,9 +4632,9 @@ export function DrawRectangleRounded(
  */
 export function DrawRectangleRoundedLines(
   rect: Rectangle,
-  roundness: number,
-  segments: number,
-  lineThick: number,
+  roundness: f32,
+  segments: i32,
+  lineThick: f32,
   color: Color
 ): void {
   lib.symbols.DrawRectangleRoundedLines(
@@ -4739,7 +4685,7 @@ export function DrawTriangleLines(
  */
 export function DrawTriangleFan(
   points: Vector2[],
-  pointCount: number,
+  pointCount: i32,
   color: Color
 ): void {
   const buffer = concatVector2s(points);
@@ -4755,7 +4701,7 @@ export function DrawTriangleFan(
  */
 export function DrawTriangleStrip(
   points: Vector2[],
-  pointCount: number,
+  pointCount: i32,
   color: Color
 ): void {
   const buffer = concatVector2s(points);
@@ -4771,9 +4717,9 @@ export function DrawTriangleStrip(
  */
 export function DrawPoly(
   center: Vector2,
-  sides: number,
-  radius: number,
-  rotation: number,
+  sides: i32,
+  radius: f32,
+  rotation: f32,
   color: Color
 ): void {
   lib.symbols.DrawPoly(
@@ -4790,9 +4736,9 @@ export function DrawPoly(
  */
 export function DrawPolyLines(
   center: Vector2,
-  sides: number,
-  radius: number,
-  rotation: number,
+  sides: i32,
+  radius: f32,
+  rotation: f32,
   color: Color
 ): void {
   lib.symbols.DrawPolyLines(
@@ -4809,10 +4755,10 @@ export function DrawPolyLines(
  */
 export function DrawPolyLinesEx(
   center: Vector2,
-  sides: number,
-  radius: number,
-  rotation: number,
-  lineThick: number,
+  sides: i32,
+  radius: f32,
+  rotation: f32,
+  lineThick: f32,
   color: Color
 ): void {
   lib.symbols.DrawPolyLinesEx(
@@ -4871,9 +4817,9 @@ export function DrawPoint3D(position: Vector3, color: Color): void {
  */
 export function DrawCircle3D(
   center: Vector3,
-  radius: number,
+  radius: f32,
   rotationAxis: Vector3,
-  rotationAngle: number,
+  rotationAngle: f32,
   color: Color
 ): void {
   lib.symbols.DrawCircle3D(
@@ -4907,7 +4853,7 @@ export function DrawTriangle3D(
  */
 export function DrawTriangleStrip3D(
   points: Vector3[],
-  pointCount: number,
+  pointCount: i32,
   color: Color
 ): void {
   const buffer = concatVector3s(points);
@@ -4923,9 +4869,9 @@ export function DrawTriangleStrip3D(
  */
 export function DrawCube(
   position: Vector3,
-  width: number,
-  height: number,
-  length: number,
+  width: f32,
+  height: f32,
+  length: f32,
   color: Color
 ): void {
   lib.symbols.DrawCube(
@@ -4957,9 +4903,9 @@ export function DrawCubeV(
  */
 export function DrawCubeWires(
   position: Vector3,
-  width: number,
-  height: number,
-  length: number,
+  width: f32,
+  height: f32,
+  length: f32,
   color: Color
 ): void {
   lib.symbols.DrawCubeWires(
@@ -4991,7 +4937,7 @@ export function DrawCubeWiresV(
  */
 export function DrawSphere(
   centerPos: Vector3,
-  radius: number,
+  radius: f32,
   color: Color
 ): void {
   lib.symbols.DrawSphere(centerPos.buffer, radius, color.buffer as ArrayBuffer);
@@ -5002,9 +4948,9 @@ export function DrawSphere(
  */
 export function DrawSphereEx(
   centerPos: Vector3,
-  radius: number,
-  rings: number,
-  slices: number,
+  radius: f32,
+  rings: i32,
+  slices: i32,
   color: Color
 ): void {
   lib.symbols.DrawSphereEx(
@@ -5021,9 +4967,9 @@ export function DrawSphereEx(
  */
 export function DrawSphereWires(
   centerPos: Vector3,
-  radius: number,
-  rings: number,
-  slices: number,
+  radius: f32,
+  rings: i32,
+  slices: i32,
   color: Color
 ): void {
   lib.symbols.DrawSphereWires(
@@ -5040,10 +4986,10 @@ export function DrawSphereWires(
  */
 export function DrawCylinder(
   position: Vector3,
-  radiusTop: number,
-  radiusBottom: number,
-  height: number,
-  slices: number,
+  radiusTop: f32,
+  radiusBottom: f32,
+  height: f32,
+  slices: i32,
   color: Color
 ): void {
   lib.symbols.DrawCylinder(
@@ -5062,9 +5008,9 @@ export function DrawCylinder(
 export function DrawCylinderEx(
   startPos: Vector3,
   endPos: Vector3,
-  startRadius: number,
-  endRadius: number,
-  sides: number,
+  startRadius: f32,
+  endRadius: f32,
+  sides: i32,
   color: Color
 ): void {
   lib.symbols.DrawCylinderEx(
@@ -5082,10 +5028,10 @@ export function DrawCylinderEx(
  */
 export function DrawCylinderWires(
   position: Vector3,
-  radiusTop: number,
-  radiusBottom: number,
-  height: number,
-  slices: number,
+  radiusTop: f32,
+  radiusBottom: f32,
+  height: f32,
+  slices: i32,
   color: Color
 ): void {
   lib.symbols.DrawCylinderWires(
@@ -5104,9 +5050,9 @@ export function DrawCylinderWires(
 export function DrawCylinderWiresEx(
   startPos: Vector3,
   endPos: Vector3,
-  startRadius: number,
-  endRadius: number,
-  sides: number,
+  startRadius: f32,
+  endRadius: f32,
+  sides: i32,
   color: Color
 ): void {
   lib.symbols.DrawCylinderWiresEx(
@@ -5144,7 +5090,7 @@ export function DrawRay(ray: { buffer: ArrayBuffer }, color: Color): void {
 /**
  * Draw a grid (centered at (0, 0, 0))
  */
-export function DrawGrid(slices: number, spacing: number): void {
+export function DrawGrid(slices: i32, spacing: f32): void {
   lib.symbols.DrawGrid(slices, spacing);
 }
 
@@ -5163,42 +5109,166 @@ export function DrawGrid(slices: number, spacing: number): void {
 export class Model {
   constructor(
     public transform: Matrix,
-    public meshCount: number,
+    public meshCount: i32,
     public meshes: { buffer: ArrayBuffer }[],
     public materials: { buffer: ArrayBuffer }[],
-    public meshMaterial: number[],
-    public boneCount: number,
+    public meshMaterial: i32,
+    public boneCount: i32,
     public bones: { buffer: ArrayBuffer }[],
     public bindPose: { buffer: ArrayBuffer }[]
   ) {}
 
   static fromBuffer(buffer: ArrayBuffer): Model {
-    // This is a simplified version - in a real implementation you'd need to handle
-    // the complex structure properly
     const view = new DataView(buffer);
+    let offset = 0;
+
+    // Extract transform matrix (20 f32 values = 80 bytes)
+    const transform = Matrix.fromBuffer(buffer.slice(offset, offset + 80));
+    offset += 80;
+
+    // Extract meshCount (i32 = 4 bytes)
+    const meshCount = view.getInt32(offset, true);
+    offset += 4;
+
+    // Extract boneCount (i32 = 4 bytes)
+    const boneCount = view.getInt32(offset, true);
+    offset += 4;
+
+    // Extract meshes pointer (pointer = 8 bytes on 64-bit)
+    const meshesPtr = view.getBigUint64(offset, true);
+    offset += 8;
+
+    // Extract materials pointer (pointer = 8 bytes on 64-bit)
+    const materialsPtr = view.getBigUint64(offset, true);
+    offset += 8;
+
+    // Extract bones pointer (pointer = 8 bytes on 64-bit)
+    const bonesPtr = view.getBigUint64(offset, true);
+    offset += 8;
+
+    // Extract meshMaterial (i32 = 4 bytes)
+    const meshMaterial = view.getInt32(offset, true);
+    offset += 4;
+
+    // Extract bindPose pointer (pointer = 8 bytes on 64-bit)
+    const bindPosePtr = view.getBigUint64(offset, true);
+    offset += 8;
+
+    // Extract additional pointer (pointer = 8 bytes on 64-bit)
+    const _additionalPtr = view.getBigUint64(offset, true);
+
+    // Convert pointers to ArrayBuffer objects for array handling
+    const meshes = Model.readPointerArray(meshesPtr, meshCount, 152); // Mesh struct size
+    const materials = Model.readPointerArray(materialsPtr, meshCount, 28); // Material struct size
+    const bones = Model.readPointerArray(bonesPtr, boneCount, 64); // Bone struct size
+    const bindPose = Model.readPointerArray(bindPosePtr, boneCount, 64); // Matrix struct size
+
     return new Model(
-      Matrix.fromBuffer(buffer.slice(0, 64)), // transform
-      view.getInt32(64, true), // meshCount
-      [], // meshes - would need proper array handling
-      [], // materials - would need proper array handling
-      [], // meshMaterial - would need proper array handling
-      view.getInt32(68, true), // boneCount
-      [], // bones - would need proper array handling
-      [] // bindPose - would need proper array handling
+      transform,
+      meshCount,
+      meshes,
+      materials,
+      meshMaterial,
+      boneCount,
+      bones,
+      bindPose
     );
   }
 
+  /**
+   * Helper method to read an array of structs from a pointer
+   *
+   * This method safely dereferences C pointers and reads array data from memory.
+   * It handles the conversion from C-style arrays to JavaScript ArrayBuffer objects.
+   *
+   * @param ptr - The memory pointer to the array
+   * @param count - Number of elements in the array
+   * @param structSize - Size of each struct in bytes
+   * @returns Array of objects with buffer property containing the struct data
+   */
+  private static readPointerArray(
+    ptr: bigint,
+    count: i32,
+    structSize: i32
+  ): { buffer: ArrayBuffer }[] {
+    if (ptr === 0n || count === 0) {
+      return [];
+    }
+
+    const result: { buffer: ArrayBuffer }[] = [];
+    const pointer = Deno.UnsafePointer.create(ptr);
+
+    if (!pointer) {
+      console.warn("Failed to create pointer from bigint:", ptr);
+      return [];
+    }
+
+    try {
+      const view = new Deno.UnsafePointerView(pointer);
+
+      for (let i = 0; i < count; i++) {
+        const structBuffer = new ArrayBuffer(structSize);
+        const structView = new Uint8Array(structBuffer);
+
+        // Read the struct data from memory
+        for (let j = 0; j < structSize; j++) {
+          structView[j] = view.getUint8(i * structSize + j);
+        }
+
+        result.push({ buffer: structBuffer });
+      }
+    } catch (error) {
+      console.warn("Error reading pointer array:", error);
+      return [];
+    }
+
+    return result;
+  }
+
   get buffer(): ArrayBuffer {
-    // This is a simplified version - in a real implementation you'd need to handle
-    // the complex structure properly
-    const buffer = new ArrayBuffer(72);
+    // Calculate total buffer size: 20 f32 + 2 i32 + 6 pointers = 80 + 8 + 48 = 136 bytes
+    const buffer = new ArrayBuffer(136);
     const view = new DataView(buffer);
-    // Copy transform matrix
-    new Uint8Array(buffer, 0, 64).set(
-      new Uint8Array(this.transform.buffer as ArrayBuffer)
-    );
-    view.setInt32(64, this.meshCount, true);
-    view.setInt32(68, this.boneCount, true);
+    let offset = 0;
+
+    // Copy transform matrix (20 f32 values = 80 bytes)
+    const transformData = new Uint8Array(this.transform.buffer as ArrayBuffer);
+    new Uint8Array(buffer, offset, 80).set(transformData.slice(0, 80));
+    offset += 80;
+
+    // Copy meshCount (i32 = 4 bytes)
+    view.setInt32(offset, this.meshCount, true);
+    offset += 4;
+
+    // Copy boneCount (i32 = 4 bytes)
+    view.setInt32(offset, this.boneCount, true);
+    offset += 4;
+
+    // Copy meshes pointer (pointer = 8 bytes)
+    // Note: In a real implementation, you'd need to allocate memory for the arrays
+    // and store the pointers. This is a placeholder.
+    view.setBigUint64(offset, 0n, true);
+    offset += 8;
+
+    // Copy materials pointer (pointer = 8 bytes)
+    view.setBigUint64(offset, 0n, true);
+    offset += 8;
+
+    // Copy bones pointer (pointer = 8 bytes)
+    view.setBigUint64(offset, 0n, true);
+    offset += 8;
+
+    // Copy meshMaterial (i32 = 4 bytes)
+    view.setInt32(offset, this.meshMaterial, true);
+    offset += 4;
+
+    // Copy bindPose pointer (pointer = 8 bytes)
+    view.setBigUint64(offset, 0n, true);
+    offset += 8;
+
+    // Copy additional pointer (pointer = 8 bytes)
+    view.setBigUint64(offset, 0n, true);
+
     return buffer;
   }
 }
@@ -5208,8 +5278,8 @@ export class Model {
  */
 export class ModelAnimation {
   constructor(
-    public boneCount: number,
-    public frameCount: number,
+    public boneCount: i32,
+    public frameCount: i32,
     public bones: { buffer: ArrayBuffer }[],
     public framePoses: { buffer: ArrayBuffer }[][]
   ) {}
@@ -5281,7 +5351,7 @@ export function GetModelBoundingBox(model: Model): BoundingBox {
 export function DrawModel(
   model: Model,
   position: Vector3,
-  scale: number,
+  scale: f32,
   tint: Color
 ): void {
   lib.symbols.DrawModel(
@@ -5299,7 +5369,7 @@ export function DrawModelEx(
   model: Model,
   position: Vector3,
   rotationAxis: Vector3,
-  rotationAngle: number,
+  rotationAngle: f32,
   scale: Vector3,
   tint: Color
 ): void {
@@ -5319,7 +5389,7 @@ export function DrawModelEx(
 export function DrawModelWires(
   model: Model,
   position: Vector3,
-  scale: number,
+  scale: f32,
   tint: Color
 ): void {
   lib.symbols.DrawModelWires(
@@ -5337,7 +5407,7 @@ export function DrawModelWiresEx(
   model: Model,
   position: Vector3,
   rotationAxis: Vector3,
-  rotationAngle: number,
+  rotationAngle: f32,
   scale: Vector3,
   tint: Color
 ): void {
@@ -5365,7 +5435,7 @@ export function DrawBillboard(
   camera: { buffer: ArrayBuffer },
   texture: { buffer: ArrayBuffer },
   position: Vector3,
-  size: number,
+  size: f32,
   tint: Color
 ): void {
   lib.symbols.DrawBillboard(
@@ -5409,7 +5479,7 @@ export function DrawBillboardPro(
   up: Vector3,
   size: Vector2,
   origin: Vector2,
-  rotation: number,
+  rotation: f32,
   tint: Color
 ): void {
   lib.symbols.DrawBillboardPro(
@@ -5428,10 +5498,7 @@ export function DrawBillboardPro(
 /**
  * Upload mesh vertex data in GPU and provide VAO/VBO ids
  */
-export function UploadMesh(
-  mesh: { buffer: ArrayBuffer },
-  dynamic: number
-): void {
+export function UploadMesh(mesh: { buffer: ArrayBuffer }, dynamic: i32): void {
   lib.symbols.UploadMesh(Deno.UnsafePointer.of(mesh.buffer), dynamic);
 }
 
@@ -5440,10 +5507,10 @@ export function UploadMesh(
  */
 export function UpdateMeshBuffer(
   mesh: { buffer: ArrayBuffer },
-  index: number,
+  index: i32,
   data: Uint8Array,
-  dataSize: number,
-  offset: number
+  dataSize: i32,
+  offset: i32
 ): void {
   lib.symbols.UpdateMeshBuffer(
     mesh.buffer,
@@ -5483,7 +5550,7 @@ export function DrawMeshInstanced(
   mesh: { buffer: ArrayBuffer },
   material: { buffer: ArrayBuffer },
   transforms: Matrix[],
-  instances: number
+  instances: i32
 ): void {
   const buffer = new Float32Array(transforms.length * 16);
   for (let i = 0; i < transforms.length; i++) {
@@ -5503,9 +5570,9 @@ export function DrawMeshInstanced(
  */
 export function CheckCollisionSpheres(
   center1: Vector3,
-  radius1: number,
+  radius1: f32,
   center2: Vector3,
-  radius2: number
+  radius2: f32
 ): boolean {
   return !!lib.symbols.CheckCollisionSpheres(
     center1.buffer,
@@ -5534,7 +5601,7 @@ export function CheckCollisionBoxes(
 export function CheckCollisionBoxSphere(
   box: BoundingBox,
   center: Vector3,
-  radius: number
+  radius: f32
 ): boolean {
   return !!lib.symbols.CheckCollisionBoxSphere(
     box.buffer,
@@ -5549,8 +5616,8 @@ export function CheckCollisionBoxSphere(
 export function GetRayCollisionSphere(
   ray: Ray,
   center: Vector3,
-  radius: number
-): { hit: boolean; distance: number; point: Vector3; normal: Vector3 } {
+  radius: f32
+): { hit: boolean; distance: f32; point: Vector3; normal: Vector3 } {
   const result = lib.symbols.GetRayCollisionSphere(
     ray.buffer,
     center.buffer,
@@ -5579,7 +5646,7 @@ export function GetRayCollisionSphere(
 export function GetRayCollisionBox(
   ray: Ray,
   box: BoundingBox
-): { hit: boolean; distance: number; point: Vector3; normal: Vector3 } {
+): { hit: boolean; distance: f32; point: Vector3; normal: Vector3 } {
   const result = lib.symbols.GetRayCollisionBox(
     ray.buffer,
     box.buffer as ArrayBuffer
@@ -5608,7 +5675,7 @@ export function GetRayCollisionMesh(
   ray: Ray,
   mesh: { buffer: ArrayBuffer },
   transform: Matrix
-): { hit: boolean; distance: number; point: Vector3; normal: Vector3 } {
+): { hit: boolean; distance: f32; point: Vector3; normal: Vector3 } {
   const result = lib.symbols.GetRayCollisionMesh(
     ray.buffer,
     mesh.buffer,
@@ -5639,7 +5706,7 @@ export function GetRayCollisionTriangle(
   p1: Vector3,
   p2: Vector3,
   p3: Vector3
-): { hit: boolean; distance: number; point: Vector3; normal: Vector3 } {
+): { hit: boolean; distance: f32; point: Vector3; normal: Vector3 } {
   const result = lib.symbols.GetRayCollisionTriangle(
     ray.buffer,
     p1.buffer,
@@ -5672,7 +5739,7 @@ export function GetRayCollisionQuad(
   p2: Vector3,
   p3: Vector3,
   p4: Vector3
-): { hit: boolean; distance: number; point: Vector3; normal: Vector3 } {
+): { hit: boolean; distance: f32; point: Vector3; normal: Vector3 } {
   const result = lib.symbols.GetRayCollisionQuad(
     ray.buffer,
     p1.buffer,
@@ -5711,21 +5778,21 @@ export function GetRayCollisionQuad(
  */
 export class Mesh {
   constructor(
-    public vertexCount: number,
-    public triangleCount: number,
-    public vertices: number[],
-    public texcoords: number[],
-    public texcoords2: number[],
-    public normals: number[],
-    public tangents: number[],
-    public colors: number[],
-    public indices: number[],
-    public animVertices: number[],
-    public animNormals: number[],
-    public boneIds: number[],
-    public boneWeights: number[],
-    public vaoId: number,
-    public vboId: number[]
+    public vertexCount: i32,
+    public triangleCount: i32,
+    public vertices: f32[],
+    public texcoords: f32[],
+    public texcoords2: f32[],
+    public normals: f32[],
+    public tangents: f32[],
+    public colors: f32[],
+    public indices: i32[],
+    public animVertices: f32[],
+    public animNormals: f32[],
+    public boneIds: i32[],
+    public boneWeights: f32[],
+    public vaoId: i32,
+    public vboId: i32[]
   ) {}
 
   static fromBuffer(buffer: ArrayBuffer): Mesh {
@@ -5766,7 +5833,7 @@ export class Mesh {
 /**
  * Generate polygonal mesh
  */
-export function GenMeshPoly(sides: number, radius: number): Mesh {
+export function GenMeshPoly(sides: i32, radius: f32): Mesh {
   return Mesh.fromBuffer(
     lib.symbols.GenMeshPoly(sides, radius).buffer as ArrayBuffer
   );
@@ -5776,10 +5843,10 @@ export function GenMeshPoly(sides: number, radius: number): Mesh {
  * Generate plane mesh (with subdivisions)
  */
 export function GenMeshPlane(
-  width: number,
-  length: number,
-  resX: number,
-  resZ: number
+  width: f32,
+  length: f32,
+  resX: i32,
+  resZ: i32
 ): Mesh {
   return Mesh.fromBuffer(
     lib.symbols.GenMeshPlane(width, length, resX, resZ).buffer
@@ -5789,11 +5856,7 @@ export function GenMeshPlane(
 /**
  * Generate cuboid mesh
  */
-export function GenMeshCube(
-  width: number,
-  height: number,
-  length: number
-): Mesh {
+export function GenMeshCube(width: f32, height: f32, length: f32): Mesh {
   return Mesh.fromBuffer(
     lib.symbols.GenMeshCube(width, height, length).buffer as ArrayBuffer
   );
@@ -5802,11 +5865,7 @@ export function GenMeshCube(
 /**
  * Generate sphere mesh (standard sphere)
  */
-export function GenMeshSphere(
-  radius: number,
-  rings: number,
-  slices: number
-): Mesh {
+export function GenMeshSphere(radius: f32, rings: i32, slices: i32): Mesh {
   return Mesh.fromBuffer(
     lib.symbols.GenMeshSphere(radius, rings, slices).buffer
   );
@@ -5815,11 +5874,7 @@ export function GenMeshSphere(
 /**
  * Generate half-sphere mesh (no bottom cap)
  */
-export function GenMeshHemiSphere(
-  radius: number,
-  rings: number,
-  slices: number
-): Mesh {
+export function GenMeshHemiSphere(radius: f32, rings: i32, slices: i32): Mesh {
   return Mesh.fromBuffer(
     lib.symbols.GenMeshHemiSphere(radius, rings, slices).buffer
   );
@@ -5828,11 +5883,7 @@ export function GenMeshHemiSphere(
 /**
  * Generate cylinder mesh
  */
-export function GenMeshCylinder(
-  radius: number,
-  height: number,
-  slices: number
-): Mesh {
+export function GenMeshCylinder(radius: f32, height: f32, slices: i32): Mesh {
   return Mesh.fromBuffer(
     lib.symbols.GenMeshCylinder(radius, height, slices).buffer
   );
@@ -5841,11 +5892,7 @@ export function GenMeshCylinder(
 /**
  * Generate cone/pyramid mesh
  */
-export function GenMeshCone(
-  radius: number,
-  height: number,
-  slices: number
-): Mesh {
+export function GenMeshCone(radius: f32, height: f32, slices: i32): Mesh {
   return Mesh.fromBuffer(
     lib.symbols.GenMeshCone(radius, height, slices).buffer
   );
@@ -5855,10 +5902,10 @@ export function GenMeshCone(
  * Generate torus mesh
  */
 export function GenMeshTorus(
-  radius: number,
-  size: number,
-  radSeg: number,
-  sides: number
+  radius: f32,
+  size: f32,
+  radSeg: i32,
+  sides: i32
 ): Mesh {
   return Mesh.fromBuffer(
     lib.symbols.GenMeshTorus(radius, size, radSeg, sides).buffer
@@ -5869,10 +5916,10 @@ export function GenMeshTorus(
  * Generate trefoil knot mesh
  */
 export function GenMeshKnot(
-  radius: number,
-  size: number,
-  radSeg: number,
-  sides: number
+  radius: f32,
+  size: f32,
+  radSeg: i32,
+  sides: i32
 ): Mesh {
   return Mesh.fromBuffer(
     lib.symbols.GenMeshKnot(radius, size, radSeg, sides).buffer
@@ -5966,7 +6013,7 @@ export function ExportMesh(mesh: Mesh, fileName: string): boolean {
  * Shader type
  */
 export class Shader {
-  constructor(public id: number, public locs: number[]) {}
+  constructor(public id: i32, public locs: i32[]) {}
 
   static fromBuffer(buffer: ArrayBuffer): Shader {
     const view = new DataView(buffer);
@@ -6018,7 +6065,7 @@ export function IsShaderReady(shader: Shader): boolean {
 /**
  * Get shader uniform location
  */
-export function GetShaderLocation(shader: Shader, uniformName: string): number {
+export function GetShaderLocation(shader: Shader, uniformName: string): i32 {
   return lib.symbols.GetShaderLocation(
     shader.buffer,
     createStringBuffer(uniformName)
@@ -6031,7 +6078,7 @@ export function GetShaderLocation(shader: Shader, uniformName: string): number {
 export function GetShaderLocationAttrib(
   shader: Shader,
   attribName: string
-): number {
+): i32 {
   return lib.symbols.GetShaderLocationAttrib(
     shader.buffer,
     createStringBuffer(attribName)
@@ -6043,9 +6090,9 @@ export function GetShaderLocationAttrib(
  */
 export function SetShaderValue(
   shader: Shader,
-  locIndex: number,
-  value: number[],
-  uniformType: number
+  locIndex: i32,
+  value: f32[],
+  uniformType: i32
 ): void {
   const buffer = new Float32Array(value);
   lib.symbols.SetShaderValue(
@@ -6061,10 +6108,10 @@ export function SetShaderValue(
  */
 export function SetShaderValueV(
   shader: Shader,
-  locIndex: number,
-  value: number[],
-  uniformType: number,
-  count: number
+  locIndex: i32,
+  value: f32[],
+  uniformType: i32,
+  count: i32
 ): void {
   const buffer = new Float32Array(value);
   lib.symbols.SetShaderValueV(
@@ -6081,7 +6128,7 @@ export function SetShaderValueV(
  */
 export function SetShaderValueMatrix(
   shader: Shader,
-  locIndex: number,
+  locIndex: i32,
   mat: Matrix
 ): void {
   lib.symbols.SetShaderValueMatrix(
@@ -6096,7 +6143,7 @@ export function SetShaderValueMatrix(
  */
 export function SetShaderValueTexture(
   shader: Shader,
-  locIndex: number,
+  locIndex: i32,
   texture: { buffer: ArrayBuffer }
 ): void {
   lib.symbols.SetShaderValueTexture(
@@ -6130,8 +6177,8 @@ export class Camera3D {
     public position: Vector3,
     public target: Vector3,
     public up: Vector3,
-    public fovy: number,
-    public projection: number
+    public fovy: f32,
+    public projection: i32
   ) {}
 
   static fromBuffer(buffer: ArrayBuffer): Camera3D {
@@ -6225,8 +6272,8 @@ export function GetWorldToScreen2D(
 export function GetWorldToScreenEx(
   position: Vector3,
   camera: Camera3D,
-  width: number,
-  height: number
+  width: i32,
+  height: i32
 ): Vector2 {
   return Vector2.fromBuffer(
     lib.symbols.GetWorldToScreenEx(
@@ -6283,7 +6330,7 @@ export class Material {
   constructor(
     public shader: { buffer: ArrayBuffer },
     public maps: { buffer: ArrayBuffer }[],
-    public params: number[]
+    public params: f32[]
   ) {}
 
   static fromBuffer(buffer: ArrayBuffer): Material {
@@ -6314,7 +6361,7 @@ export class MaterialMap {
   constructor(
     public texture: { buffer: ArrayBuffer },
     public color: Color,
-    public value: number
+    public value: f32
   ) {}
 
   static fromBuffer(buffer: ArrayBuffer): MaterialMap {
@@ -6406,7 +6453,7 @@ export const SHADER_UNIFORM_SAMPLER2D = 8;
  */
 export function LoadMaterials(
   fileName: string,
-  _materialCount: { value: number }
+  _materialCount: { value: i32 }
 ): Material[] {
   const buffer = new Uint32Array(1);
   const ptr = lib.symbols.LoadMaterials(
@@ -6466,7 +6513,7 @@ export function UnloadMaterial(material: Material): void {
  */
 export function SetMaterialTexture(
   material: Material,
-  mapType: number,
+  mapType: i32,
   texture: { buffer: ArrayBuffer }
 ): void {
   lib.symbols.SetMaterialTexture(
@@ -6481,8 +6528,8 @@ export function SetMaterialTexture(
  */
 export function SetModelMeshMaterial(
   model: { buffer: ArrayBuffer },
-  meshId: number,
-  materialId: number
+  meshId: i32,
+  materialId: i32
 ): void {
   lib.symbols.SetModelMeshMaterial(
     Deno.UnsafePointer.of(model.buffer as ArrayBuffer),
@@ -6505,7 +6552,7 @@ export function SetModelMeshMaterial(
  */
 export function LoadFileData(
   fileName: string,
-  bytesRead: { value: number }
+  bytesRead: { value: i32 }
 ): Uint8Array {
   const buffer = new Uint32Array(1);
   const ptr = lib.symbols.LoadFileData(
@@ -6533,7 +6580,7 @@ export function UnloadFileData(data: Uint8Array): void {
 export function SaveFileData(
   fileName: string,
   data: Uint8Array,
-  bytesToWrite: number
+  bytesToWrite: i32
 ): boolean {
   return !!lib.symbols.SaveFileData(
     createStringBuffer(fileName),
@@ -6547,7 +6594,7 @@ export function SaveFileData(
  */
 export function ExportDataAsCode(
   data: Uint8Array,
-  size: number,
+  size: i32,
   fileName: string
 ): boolean {
   return !!lib.symbols.ExportDataAsCode(
@@ -6612,7 +6659,7 @@ export function IsFileExtension(fileName: string, ext: string): boolean {
 /**
  * Get file length in bytes (NOTE: GetFileSize() conflicts with windows.h)
  */
-export function GetFileLength(fileName: string): number {
+export function GetFileLength(fileName: string): i32 {
   return lib.symbols.GetFileLength(createStringBuffer(fileName));
 }
 
@@ -6817,7 +6864,7 @@ export function UnloadDroppedFiles(_files: string[]): void {
 /**
  * Get file modification time (last write time)
  */
-export function GetFileModTime(fileName: string): number {
+export function GetFileModTime(fileName: string): i32 {
   return Number(lib.symbols.GetFileModTime(createStringBuffer(fileName)));
 }
 
@@ -6846,28 +6893,28 @@ export const GESTURE_PINCH_OUT = 512;
 /**
  * Enable a set of gestures using flags
  */
-export function SetGesturesEnabled(flags: number): void {
+export function SetGesturesEnabled(flags: u32): void {
   lib.symbols.SetGesturesEnabled(flags);
 }
 
 /**
  * Check if a gesture have been detected
  */
-export function IsGestureDetected(gesture: number): boolean {
+export function IsGestureDetected(gesture: u32): boolean {
   return !!lib.symbols.IsGestureDetected(gesture);
 }
 
 /**
  * Get latest detected gesture
  */
-export function GetGestureDetected(): number {
+export function GetGestureDetected(): i32 {
   return lib.symbols.GetGestureDetected();
 }
 
 /**
  * Get gesture hold time in milliseconds
  */
-export function GetGestureHoldDuration(): number {
+export function GetGestureHoldDuration(): i32 {
   return lib.symbols.GetGestureHoldDuration();
 }
 
@@ -6883,7 +6930,7 @@ export function GetGestureDragVector(): Vector2 {
 /**
  * Get gesture drag angle
  */
-export function GetGestureDragAngle(): number {
+export function GetGestureDragAngle(): f32 {
   return lib.symbols.GetGestureDragAngle();
 }
 
@@ -6899,17 +6946,14 @@ export function GetGesturePinchVector(): Vector2 {
 /**
  * Get gesture pinch angle
  */
-export function GetGesturePinchAngle(): number {
+export function GetGesturePinchAngle(): i32 {
   return lib.symbols.GetGesturePinchAngle();
 }
 
 /**
  * Update camera position for selected mode
  */
-export function UpdateCamera(
-  camera: { buffer: ArrayBuffer },
-  mode: number
-): void {
+export function UpdateCamera(camera: { buffer: ArrayBuffer }, mode: i32): void {
   lib.symbols.UpdateCamera(
     Deno.UnsafePointer.of(camera.buffer as ArrayBuffer),
     mode

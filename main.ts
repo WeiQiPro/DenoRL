@@ -27,7 +27,7 @@ while (!RL.WindowShouldClose()) {
   RL.BeginDrawing();
   RL.ClearBackground(RL.BLACK);
 
-  drawHUD(frame);
+  drawHUD();
   drawPlexus(points, frame);
   drawMouseIndicator(mouse);
   drawShapesAndText(frame);
@@ -73,7 +73,7 @@ function updatePlexus(points: Point[], width: number, height: number): void {
   }
 }
 
-function drawHUD(frame: number): void {
+function drawHUD(): void {
   RL.DrawFPS(10, 10);
   RL.DrawText("Raylib Deno - 2D Demo + Plexus", 10, 36, 22, RL.RAYWHITE);
   RL.DrawText(
@@ -91,7 +91,7 @@ function drawPlexus(points: Point[], frame: number): void {
 
     // Node (round coordinates to int for FFI safety)
     const nodeRadius = 2 + (Math.sin((frame + i * 7) * 0.05) + 1) * 1.2;
-    RL.DrawCircle(Math.floor(a.x), Math.floor(a.y), nodeRadius, RL.GRAY);
+    RL.DrawCircle(Math.round(a.x), Math.round(a.y), nodeRadius, RL.GRAY);
 
     // Links
     for (let j = i + 1; j < points.length; j++) {
