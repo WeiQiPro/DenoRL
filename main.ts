@@ -91,7 +91,7 @@ function drawPlexus(points: Point[], frame: number): void {
 
     // Node (round coordinates to int for FFI safety)
     const nodeRadius = 2 + (Math.sin((frame + i * 7) * 0.05) + 1) * 1.2;
-    RL.DrawCircle(Math.round(a.x), Math.round(a.y), nodeRadius, RL.GRAY);
+    RL.DrawCircle(Math.floor(a.x), Math.floor(a.y), nodeRadius, RL.GRAY);
 
     // Links
     for (let j = i + 1; j < points.length; j++) {
@@ -103,10 +103,10 @@ function drawPlexus(points: Point[], frame: number): void {
         const t = 1 - dist / MAX_LINK_DIST; // 0..1
         const alpha = Math.min(255, Math.max(0, Math.floor(200 * t)));
         RL.DrawLine(
-          Math.round(a.x),
-          Math.round(a.y),
-          Math.round(b.x),
-          Math.round(b.y),
+          Math.floor(a.x),
+          Math.floor(a.y),
+          Math.floor(b.x),
+          Math.floor(b.y),
           new RL.Color(200, 200, 200, alpha)
         );
       }
@@ -115,7 +115,7 @@ function drawPlexus(points: Point[], frame: number): void {
 }
 
 function drawMouseIndicator(mouse: RL.Vector2): void {
-  RL.DrawCircle(Math.round(mouse.x), Math.round(mouse.y), 8, RL.YELLOW);
+  RL.DrawCircle(Math.floor(mouse.x), Math.floor(mouse.y), 8, RL.YELLOW);
 }
 
 function drawShapesAndText(frame: number): void {
