@@ -14,7 +14,6 @@ I wanted to remove the higher-level, idiomatic class wrappers and expose a near 
 - Stick close to raylib's function names, constants, and structs.
 - Favor simple FFI bindings over abstractions.
 - Keep examples runnable with Deno permissions and idioms.
-- Provide an easy way to build a project and ship it!
 
 ## Caveats
 - File I/O (loading files from disk, etc.) should be done via Deno APIs when possible. Avoid calling into raylib for generic file operations; feed raylib buffers instead.
@@ -51,4 +50,10 @@ deno task run
 - Bug reports and small PRs welcome (particularly for 3D coverage).
 - Please prefer keeping the API surface close to raylib C, and add helpers as separate utilities if needed.
 
+## License & Disclaimer
+- This project is licensed under the MIT License (see `LICENSE`). Free to use, modify, and distribute.
+- raylib itself is licensed under the zlib/libpng license; those terms apply to raylib binaries/headers used by these bindings.
+- These bindings are provided “as is”, without warranty of any kind. I am not responsible for any damages or issues arising from use of these bindings or the underlying libraries.
+
 Thanks again to Lino for the original Deno bindings that inspired this work.
+
