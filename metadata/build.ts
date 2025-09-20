@@ -7,7 +7,7 @@ import { ensureDir, copy, exists } from "@std/fs";
 import { join } from "@std/path";
 
 // Load build configuration
-const configPath = "./metadata/project.json";
+const configPath = join("metadata", "project.json");
 
 interface BuildConfig {
   project: {

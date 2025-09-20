@@ -161,6 +161,7 @@ export const GOLD = new Color(255, 203, 0, 255); // Gold
 export const ORANGE = new Color(255, 161, 0, 255); // Orange
 export const PINK = new Color(255, 109, 194, 255); // Pink
 export const RED = new Color(230, 41, 55, 255); // Red
+export const DARKRED = new Color(190, 33, 55, 255); // Dark Red
 export const MAROON = new Color(190, 33, 55, 255); // Maroon
 export const GREEN = new Color(0, 228, 48, 255); // Green
 export const LIME = new Color(0, 158, 47, 255); // Lime
