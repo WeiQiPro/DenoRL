@@ -198,9 +198,6 @@ async function main() {
 
     console.log("\n🎉 Build completed successfully!");
     console.log(`📁 Build output: ${PLATFORM_DIR}`);
-    console.log(`\nTo run the game:`);
-    console.log(`  cd ${PLATFORM_DIR}`);
-    console.log(`  ${PLATFORM === "windows" ? "run.bat" : "./run.sh"}`);
   } catch (error) {
     // v1.02: Fix error handling for unknown type in catch (consistent with config load error handling)
     if (error && typeof error === "object" && "message" in error) {
