@@ -16,6 +16,7 @@ I wanted to remove the higher-level, idiomatic class wrappers and expose a near 
 - Keep examples runnable with Deno permissions and idioms.
 
 ## Caveats
+- IMPORTANT I have added (Bitwise OR with zero) for all i32 functions. If something wonky is happening please check that numbers you put into i32 types are indead not floats.
 - File I/O (loading files from disk, etc.) should be done via Deno APIs when possible. Avoid calling into raylib for generic file operations; feed raylib buffers instead.
 - Not everything is tested yet, especially some 3D APIs. Contributions are welcome.
 
@@ -45,6 +46,7 @@ deno task run
 - Input and timing basics validated.
 - Audio validated for basic playback.
 - 3D functions: not fully tested. If you can help test/fix, please open a PR.
+- C callback functions are implemented, some audiostream functions need fixing
 
 ## Contributing
 - Bug reports and small PRs welcome (particularly for 3D coverage).
