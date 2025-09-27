@@ -4955,10 +4955,10 @@ export function LoadTextureCubemap(
       .buffer as ArrayBuffer
   );
 }
-export function LoadRenderTexture(width: i32, height: i32): Texture2D {
+export function LoadRenderTexture(width: i32, height: i32): RenderTexture2D {
   width = (width | 0) as i32;
   height = (height | 0) as i32;
-  return Texture2D.fromBuffer(
+  return RenderTexture2D.fromBuffer(
     lib.symbols.LoadRenderTexture(width, height).buffer as ArrayBuffer
   );
 }
@@ -4969,10 +4969,10 @@ export function IsTextureReady(texture: Texture2D): boolean {
 export function UnloadTexture(texture: Texture2D): void {
   lib.symbols.UnloadTexture(texture.buffer as ArrayBuffer);
 }
-export function IsRenderTextureReady(texture: Texture2D): boolean {
+export function IsRenderTextureReady(texture: RenderTexture2D): boolean {
   return !!lib.symbols.IsRenderTextureReady(texture.buffer as ArrayBuffer);
 }
-export function UnloadRenderTexture(texture: Texture2D): void {
+export function UnloadRenderTexture(texture: RenderTexture2D): void {
   lib.symbols.UnloadRenderTexture(texture.buffer as ArrayBuffer);
 }
 export function UpdateTexture(texture: Texture2D, pixels: Uint8Array): void {
